@@ -1,0 +1,10 @@
+{
+  "package": "com.github.scoliossis.base.mixin",
+  "refmap": "mixins.scalehack.refmap.json",
+  "minVersion": "0.7",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "net.minecraft.network.NetworkManagerMixin",
+    "net.minecraftforge.fml.common.network.handshake.MixinFMLHandshakeMessage$ModListMixin"
+  ]
+}

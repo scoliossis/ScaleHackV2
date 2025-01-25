@@ -1,0 +1,19 @@
+[
+	{
+		"modid": "${modid}",
+		"name": "Scale Hack",
+		"description": "long live scale1337",
+		"version": "${version}",
+		"mcversion": "${mcversion}",
+		"url": "",
+		"updateUrl": "",
+		"authorList": [
+			"scale",
+			"xifil"
+		],
+		"credits": "my mom, she a real one",
+		"logoFile": "",
+		"screenshots": [],
+		"dependencies": []
+	}
+]
