@@ -1,6 +1,9 @@
 <!-- markdownlint-disable-file MD001 MD033 -->
-<h1 align="center"><a href="https://github.com/scoliossis">scoliosis</a>/<a href="https://github.com/scoliossis/lesbianhack">lesbianhack</a></h1>
-<p align="center">the only hack you need.</p>
+<h1 align="center"><a href="https://github.com/scoliossis">scoliossis</a>/<a href="https://github.com/scoliossis/ScaleHackV2">scalehackv2</a></h1>
+<p align="center">the only hack you need.<br>
+                  readme + base by <a href="https://github.com/xifil">evil lifix</a>
+</p>
+
 <div align="center">
    <img src="repo%2FFljj0Z7agAMN4DN.png" />
 </div>
@@ -8,7 +11,7 @@
 ## Setup
 1. Clone the repo
    ```sh
-   git clone https://github.com/scoliossis/worse-base
+   git clone https://github.com/scoliossis/ScaleHackV2
    ```
 2. Open `build.gradle.kts` in IntelliJ IDEA
 
@@ -32,5 +35,3 @@
    ![projectjdk.png](repo%2Fprojectjdk.png)
 
 5. epic gamign
-
-readme + base + name by https://github.com/xifil
