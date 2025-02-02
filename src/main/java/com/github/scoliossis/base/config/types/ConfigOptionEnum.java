@@ -1,16 +1,15 @@
 package com.github.scoliossis.base.config.types;
 
-import java.awt.*;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-
 import com.github.scoliossis.base.config.ConfigOption;
 import com.github.scoliossis.base.modules.Setting;
 import com.github.scoliossis.base.screens.clickgui.ClickGUIScreenMain;
-import com.github.scoliossis.base.utils.ChatUtil;
-import com.github.scoliossis.base.utils.FontUtil;
 import com.github.scoliossis.base.utils.RenderUtil;
+import com.github.scoliossis.base.utils.font.FontRegistry;
 import lombok.Getter;
+
+import java.awt.*;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 
 import static com.github.scoliossis.base.screens.clickgui.ClickGUIScreenMain.*;
 
@@ -31,7 +30,7 @@ public class ConfigOptionEnum<T> extends ConfigOption<T> {
 
         String mode = formatSettingName(this.getOption().name);
 
-        RenderUtil.drawStringCenteredY("&o" + settingName + "   -   " + mode, x + 5, y + (childHeight / 2f), fontSize, new Color(0xEEEEEE));
+        RenderUtil.drawStringCenteredY(settingName + "   -   " + mode, x + 5, y + (childHeight / 2f), new Color(0xEEEEEE));
 
         Color color = getColor(categoryNumber);
 
@@ -66,17 +65,20 @@ public class ConfigOptionEnum<T> extends ConfigOption<T> {
 
         T[] enumConstants = (T[]) field.getType().getEnumConstants();
 
+        RenderUtil.drawRect(x, stringY, width, moduleHeight, new Color(26,26,26));
+        RenderUtil.drawRect(x+xOff, stringY, width-xOff*2, childHeight, getBackgroundColor(this, 2));
+
         for (int i = 0; i < enumConstants.length; i++) {
             String settingName = formatSettingName(enumConstants[i].toString());
             if (i != enumConstants.length-1) settingName += ", ";
 
-            float stringWidth = FontUtil.getStringWidth(settingName, fontSize);
+            float stringWidth = FontRegistry.getSpaceGroteskRegular18px().getStringWidth(settingName);
             if (stringX + stringWidth >= x + width) {
-                RenderUtil.drawRect(x, stringY, width, moduleHeight, new Color(26,26,26));
-                RenderUtil.drawRect(x+xOff, stringY, width-xOff*2, childHeight, getBackgroundColor(this, 2));
-
                 stringX = x+5;
                 stringY += childHeight;
+
+                RenderUtil.drawRect(x, stringY, width, moduleHeight, new Color(26,26,26));
+                RenderUtil.drawRect(x+xOff, stringY, width-xOff*2, childHeight, getBackgroundColor(this, 2));
 
                 //y += height;
             }
@@ -87,13 +89,11 @@ public class ConfigOptionEnum<T> extends ConfigOption<T> {
             if (isHovered(stringX, stringY, stringWidth, childHeight) && (leftMousePressed || rightMousePressed))
                 this.set((T) field.getType().getEnumConstants()[i]);
 
-            RenderUtil.drawStringCenteredY("&o" + settingName, stringX, stringY + (childHeight / 2f), fontSize, fontColor);
+            RenderUtil.drawStringCenteredY(settingName, stringX, stringY + (childHeight / 2f), fontColor);
 
-            stringX += FontUtil.getStringWidth(settingName, fontSize);
+            stringX += FontRegistry.getSpaceGroteskRegular18px().getStringWidth(settingName);
         }
 
-        RenderUtil.drawRect(x, stringY, width, moduleHeight, new Color(26,26,26));
-        RenderUtil.drawRect(x+xOff, stringY, width-xOff*2, childHeight, getBackgroundColor(this, 2));
         drawOutline(stringY, color);
 
         //yOffset -= (oldY-y);

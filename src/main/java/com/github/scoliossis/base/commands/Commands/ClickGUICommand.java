@@ -1,9 +1,8 @@
 package com.github.scoliossis.base.commands.Commands;
 
 import com.github.scoliossis.base.commands.Command;
-import com.github.scoliossis.base.screens.clickgui.ClickGUIScreenMain;
-import com.github.scoliossis.base.utils.C;
-import com.github.scoliossis.base.utils.ChatUtil;
+import com.github.scoliossis.base.modules.ModuleManager;
+import com.github.scoliossis.base.modules.impl.client.ClickGUIModule;
 
 public class ClickGUICommand extends Command {
     public ClickGUICommand() {
@@ -13,7 +12,7 @@ public class ClickGUICommand extends Command {
 
     @Override
     public boolean handleCommand(String message) {
-        C.screenToDisplay = new ClickGUIScreenMain();
+        ModuleManager.toggle(ClickGUIModule.class);
         return true;
     }
 }

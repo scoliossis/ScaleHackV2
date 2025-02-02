@@ -1,6 +1,5 @@
 package com.github.scoliossis.base.config.types;
 
-import com.github.scoliossis.base.Events.PacketEvent;
 import com.github.scoliossis.base.config.ConfigOption;
 import com.github.scoliossis.base.modules.Setting;
 import com.github.scoliossis.base.screens.clickgui.ClickGUIScreenMain;
@@ -34,7 +33,7 @@ public class ConfigOptionBoolean extends ConfigOption<Boolean> {
         // draws a growing square infront of a white one, square grows until behind square is filled
         drawEnabledBox(categoryNumber);
 
-        RenderUtil.drawStringCenteredY("&o" + settingName, x + 5, y + (childHeight / 2f), fontSize, new Color(238,238,238));
+        RenderUtil.drawStringCenteredY(settingName, x + 5, y + (childHeight / 2f), new Color(238,238,238));
 
         ClickGUIScreenMain.drawOutline(childHeight, getColor(categoryNumber));
 

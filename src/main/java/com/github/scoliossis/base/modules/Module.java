@@ -1,12 +1,13 @@
 package com.github.scoliossis.base.modules;
 
+import com.github.scoliossis.base.Events.Bus;
+import com.github.scoliossis.base.Events.impl.ModuleStateChangeEvent;
+import com.github.scoliossis.base.config.ConfigOption;
 import com.github.scoliossis.base.modules.impl.client.ClickGUIModule;
 import com.github.scoliossis.base.utils.AnimationUtil;
-import com.github.scoliossis.base.utils.C;
-import com.github.scoliossis.base.Events.ModuleStateChangeEvent;
-import com.github.scoliossis.base.config.ConfigOption;
-import com.github.scoliossis.base.utils.FontUtil;
 import com.github.scoliossis.base.utils.RenderUtil;
+import com.github.scoliossis.base.utils.font.FontRegistry;
+import lombok.Getter;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -18,13 +19,14 @@ public abstract class Module {
     public ArrayList<ConfigOption<?>> children = new ArrayList<>();
 
 
+    @Getter
     public boolean enabled;
 
     public void setEnabled(boolean flag) {
         boolean changed = enabled != flag;
         if (changed) {
             // needed for notifications / arraylist and maybe others
-            if (C.eventBus.post(new ModuleStateChangeEvent(this.getClass(), enabled, flag))) return;
+            if (Bus.post(new ModuleStateChangeEvent(this.getClass(), enabled, flag))) return;
 
             enabled = flag;
 
@@ -70,8 +72,7 @@ public abstract class Module {
         drawToggledModule(clickedInfo, categoryNumber);
 
         // draw text
-        //RenderUtil.drawStringCenteredY("&o" + settingName, x + 5, y + (moduleHeight / 2f), fontSize, new Color(0xEEEEEE));
-        RenderUtil.drawStringCenteredY("&o" + settingName, x + width - stringIndentLeft - FontUtil.getStringWidth(settingName, fontSize), y + (moduleHeight / 2f), fontSize, new Color(0xEEEEEE));
+        RenderUtil.drawStringCenteredY(settingName, x + width - stringIndentLeft - FontRegistry.getSpaceGroteskRegular18px().getStringWidth(settingName), y + (moduleHeight / 2f), new Color(0xEEEEEE));
 
         // draws walls
         drawOutline(moduleHeight, color);

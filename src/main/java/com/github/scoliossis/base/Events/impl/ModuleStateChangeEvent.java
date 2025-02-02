@@ -1,8 +1,8 @@
-package com.github.scoliossis.base.Events;
+package com.github.scoliossis.base.Events.impl;
 
+import com.github.scoliossis.base.Events.Event;
 import com.github.scoliossis.base.modules.Module;
 import lombok.AllArgsConstructor;
-import net.minecraftforge.fml.common.eventhandler.Event;
 
 @AllArgsConstructor
 public class ModuleStateChangeEvent extends Event {

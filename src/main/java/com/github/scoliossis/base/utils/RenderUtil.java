@@ -1,6 +1,6 @@
 package com.github.scoliossis.base.utils;
 
-import com.github.scoliossis.base.Events.PacketEvent;
+import com.github.scoliossis.base.utils.font.FontRegistry;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -9,16 +9,11 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.Matrix4f;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderLivingEvent;
-import org.lwjgl.opengl.ContextCapabilities;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GLContext;
-import org.lwjgl.util.vector.Vector4f;
 
 import java.awt.*;
-import java.nio.FloatBuffer;
 import java.util.ArrayList;
 
 public class RenderUtil {
@@ -615,84 +610,14 @@ public class RenderUtil {
     }
 
     // ew, so many
-    public static void drawString(String string, float x, float y, float size, Color color) {
-        FontUtil.addString(string, x, y, size, size, color, new Integer[] {});
+    public static void drawString(String string, float x, float y, Color color) {
+        FontRegistry.getSpaceGroteskRegular18px().drawString(string, x, y, color);
     }
 
-    public static void drawStringCenteredX(String string, float x, float y, float size, Color color) {
-        float fontWidth = FontUtil.getStringWidth(string, size);
-        float fontWidthOver2 = fontWidth/2;
-
-        FontUtil.addString(string, x - fontWidthOver2, y, size, size, color, new Integer[] {});
+    public static void drawStringCenteredY(String string, float x, float y, Color color) {
+        float fontHeight = FontRegistry.getSpaceGroteskRegular18px().getHeight();
+        FontRegistry.getSpaceGroteskRegular18px().drawString(string, x, y - fontHeight/2, color);
     }
-
-    public static void drawStringCenteredY(String string, float x, float y, float size, Color color) {
-        float fontHeight = FontUtil.fontSize+FontUtil.extraHeight;
-        fontHeight *= size;
-
-        FontUtil.addString(string, x, y - fontHeight/2, size, size, color, new Integer[] {});
-    }
-    public static void drawStringCenteredY(String string, float x, float y, float sizeX, float sizeY, Color color) {
-        float fontHeight = FontUtil.fontSize+FontUtil.extraHeight;
-        fontHeight *= sizeY;
-        float fontHeightOver2 = fontHeight/2;
-
-        FontUtil.addString(string, x, y - fontHeightOver2, sizeX, sizeY, color, new Integer[] {});
-    }
-
-    public static void drawCenteredString(String string, float x, float y, float size, Color color) {
-        float fontWidth = FontUtil.getStringWidth(string, size);
-        float fontHeight = FontUtil.fontSize+FontUtil.extraHeight;
-
-        fontHeight *= size;
-
-
-        float fontHeightOver2 = fontHeight/2;
-        float fontWidthOver2 = fontWidth/2;
-
-        FontUtil.addString(string, x - fontWidthOver2, y - fontHeightOver2, size, size, color, new Integer[] {});
-    }
-
-    public static void drawString(String string, float x, float y, float sizeX, float sizeY, Color color) {
-        FontUtil.addString(string, x, y, sizeX, sizeY, color, new Integer[] {});
-    }
-
-    public static void drawStringRainbow(String string, float x, float y, float size, Color color) {
-        FontUtil.addString(string, x, y, size, size, color, new Integer[] {StringModifiers.RAINBOW});
-    }
-
-    public static void drawStringBold(String string, float x, float y, float size, Color color) {
-        FontUtil.addString(string, x, y, size, size, color, new Integer[] {StringModifiers.BOLD});
-    }
-
-    public static void drawStringShadow(String string, float x, float y, float size, Color color) {
-        FontUtil.addString(string, x, y, size, size, color, new Integer[] {StringModifiers.SHADOW});
-    }
-
-    public static void drawStringCustom(String string, float x, float y, float size, Color color, Integer[] modifiers) {
-        FontUtil.addString(string, x, y, size, size, color, modifiers);
-    }
-
-
-    // default java fonts
-    public static Font FontSerif = new Font(Font.SERIF, Font.PLAIN, FontUtil.fontSize);
-    public static Font FontSansSerif = new Font(Font.SANS_SERIF, Font.PLAIN, FontUtil.fontSize);
-    public static Font FontMonospaced = new Font(Font.MONOSPACED, Font.PLAIN, FontUtil.fontSize);
-    public static Font FontDialogue = new Font(Font.DIALOG, Font.PLAIN, FontUtil.fontSize);
-    public static Font FontDialogueInput = new Font(Font.DIALOG_INPUT, Font.PLAIN, FontUtil.fontSize);
-
-    // fonts from the C:\Windows\Fonts folder
-    // this is an ugly font :sob:
-    public static Font FontComicSansMs = new Font("Comic Sans MS", Font.PLAIN, FontUtil.fontSize);
-
-
-
-
-
-
-
-
-
 
 
     // 3d rendering WOW!!!!!
@@ -867,14 +792,13 @@ public class RenderUtil {
         GL11.glNormal3f(0.0f, 1.0f, 0.0f);
 
         float extraW = 0.15f;
-        float width = FontUtil.getStringWidth(name, 0.003f) + extraW;
+        float width = FontRegistry.getSpaceGroteskRegular18px().getStringWidth(name) + extraW;
 
         addRectVertex(-width/2f - extraW/2f,0,width,0.35f, color);
 
-        RenderUtil.drawString("&s"+name, -width/2f,-0.03f, 0.003f, new Color(0xfffffff));
+        RenderUtil.drawString("&s"+name, -width/2f,-0.03f, new Color(0xfffffff));
 
         finish2d();
-        FontUtil.renderStrings();
 
         GL11.glPopMatrix();
         GL11.glEnable(GL11.GL_DEPTH_TEST);

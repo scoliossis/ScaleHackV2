@@ -2,7 +2,6 @@ package com.github.scoliossis.base.utils;
 
 import java.util.Random;
 
-// stolen from mushroom client
 public class MathUtil {
 
     private static final Random rand = new Random();
@@ -28,5 +27,13 @@ public class MathUtil {
             max = m;
         }
         return min + (max - min) * rand.nextFloat();
+    }
+
+    public static float toNearest(float num, float nearest) {
+        return Math.round(num / nearest) * nearest;
+    }
+
+    public static double toNearest(double num, double nearest) {
+        return Math.round(num / nearest) * nearest;
     }
 }

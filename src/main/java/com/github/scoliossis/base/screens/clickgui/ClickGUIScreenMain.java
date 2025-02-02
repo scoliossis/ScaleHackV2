@@ -97,7 +97,7 @@ public class ClickGUIScreenMain extends GuiScreen {
 
         // background and title name
         RenderUtil.drawRect(x, y, width, height, new Color(26,26,26));
-        RenderUtil.drawStringCenteredY("&l"+formatSettingName(category.name()), x + 5, y + (height/2f), fontSize, new Color(0xffffff));
+        RenderUtil.drawStringCenteredY(formatSettingName(category.name()), x + 5, y + (height/2f), new Color(0xffffff));
 
         // outline at top
         RenderUtil.drawRect(x, y, width, ClickGUIScreenMain.outlineWidth, color);
@@ -229,6 +229,13 @@ public class ClickGUIScreenMain extends GuiScreen {
         RenderUtil.drawRect(x+width-outlineWidth, y, outlineWidth, height, color);
     }
 
+
+    public static boolean isHovered(int mX, int mY, float x, float y, float w, float h) {
+        float[] pointsXY = RenderUtil.scalePoints(x, y);
+
+        // checks if mouseX/Y is within rectangle bounds
+        return mX >= pointsXY[0] && mX <= pointsXY[0] + w && mY >= pointsXY[1] && mY <= pointsXY[1] + h;
+    }
 
     public static boolean isHovered(float x, float y, float w, float h) {
         float[] pointsXY = RenderUtil.scalePoints(x, y);

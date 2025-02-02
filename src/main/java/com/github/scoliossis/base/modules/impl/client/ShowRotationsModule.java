@@ -1,8 +1,10 @@
 package com.github.scoliossis.base.modules.impl.client;
 
+import com.github.scoliossis.base.Events.SubscribeEvent;
+import com.github.scoliossis.base.Events.impl.MotionEvent;
+import com.github.scoliossis.base.modules.Module;
 import com.github.scoliossis.base.modules.ModuleCategory;
 import com.github.scoliossis.base.modules.RegisterModule;
-import com.github.scoliossis.base.modules.Module;
 
 @RegisterModule(
         name = "Show Rotations",
@@ -10,33 +12,26 @@ import com.github.scoliossis.base.modules.Module;
         category = ModuleCategory.Client
 )
 public class ShowRotationsModule extends Module {
-    /*
-    private float yaw;
-    private float pitch;
+    public static float yaw;
+    public static float pitch;
     private Float overrideYaw = null;
     private Float overridePitch = null;
 
-    public ShowRotationsModule() {
-        super("Show Rotations", "you spin me right round baby right round", ModuleCategory.VISUALS);
-    }
-
     @SubscribeEvent
     public void onPostMotion(MotionEvent.Post event) {
-        this.yaw = event.getYaw();
-        this.pitch = event.getPitch();
+        yaw = event.getYaw();
+        pitch = event.getPitch();
 
         if (this.overrideYaw != null) {
-            this.yaw = this.overrideYaw;
+            yaw = this.overrideYaw;
             this.overrideYaw = null;
         }
 
         if (this.overridePitch != null) {
-            this.pitch = this.overridePitch;
+            pitch = this.overridePitch;
             this.overridePitch = null;
         }
     }
-     */
-
     @Override
     protected void onEnable() {
 

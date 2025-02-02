@@ -3,9 +3,9 @@ package com.github.scoliossis.base.config.types;
 import com.github.scoliossis.base.config.ConfigOption;
 import com.github.scoliossis.base.modules.Setting;
 import com.github.scoliossis.base.screens.clickgui.ClickGUIScreenMain;
-import com.github.scoliossis.base.utils.FontUtil;
 import com.github.scoliossis.base.utils.MathUtil;
 import com.github.scoliossis.base.utils.RenderUtil;
+import com.github.scoliossis.base.utils.font.FontRegistry;
 
 import java.awt.*;
 import java.lang.reflect.Field;
@@ -39,8 +39,8 @@ public class ConfigOptionNumber<T> extends ConfigOption<T> {
         RenderUtil.drawRect(x + xOff, y + 2, (float) currentSliderNumber, childHeight - 4, getColor(categoryNumber));
 
 
-        RenderUtil.drawStringCenteredY("&o" + settingName, x + 5, y + (childHeight / 2f), fontSize, new Color(0xEEEEEE));
-        RenderUtil.drawStringCenteredY("&o" + settingNumber, x + width - FontUtil.getStringWidth("&o" + settingNumber, fontSize), y + (childHeight / 2f), fontSize, new Color(0xEEEEEE));
+        RenderUtil.drawStringCenteredY(settingName, x + 5, y + (childHeight / 2f), new Color(0xEEEEEE));
+        RenderUtil.drawStringCenteredY(""+settingNumber, x + width - FontRegistry.getSpaceGroteskRegular18px().getStringWidth("&o" + settingNumber), y + (childHeight / 2f), new Color(0xEEEEEE));
 
         ClickGUIScreenMain.drawOutline(childHeight, getColor(categoryNumber));
 

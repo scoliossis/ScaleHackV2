@@ -4,7 +4,24 @@
   "minVersion": "0.7",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "net.minecraft.client.gui.MixinFontRenderer",
+    "net.minecraft.entity.MixinEntity",
+    "net.minecraft.entity.MixinEntityLivingBase",
     "net.minecraft.network.NetworkManagerMixin",
+    "net.minecraft.world.chunk.MixinChunk",
     "net.minecraftforge.fml.common.network.handshake.MixinFMLHandshakeMessage$ModListMixin"
+  ],
+  "client": [
+    "net.minecraft.client.MixinMinecraft",
+    "net.minecraft.client.entity.MixinEntityPlayerSP",
+    "net.minecraft.client.gui.MixinGuiMainMenu",
+    "net.minecraft.client.gui.MixinGuiScreen",
+    "net.minecraft.client.gui.MixinGuiSlot",
+    "net.minecraft.client.renderer.MixinEntityRenderer",
+    "net.minecraft.client.renderer.MixinWorldRenderer",
+    "net.minecraft.client.renderer.entity.MixinRendererLivingEntity",
+    "net.minecraft.util.MixinMovementInputFromOptions",
+    "net.minecraft.util.MixinSession",
+    "net.minecraft.util.MixinTimer"
   ]
 }

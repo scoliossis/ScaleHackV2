@@ -1,23 +1,19 @@
 package com.github.scoliossis.base.modules;
 
+import com.github.scoliossis.base.Events.Bus;
+import com.github.scoliossis.base.annotations.RegisterListeners;
+import com.github.scoliossis.base.commands.CommandMain;
 import com.github.scoliossis.base.config.Category;
+import com.github.scoliossis.base.config.ConfigOption;
+import com.github.scoliossis.base.config.ConfigParent;
+import com.github.scoliossis.base.config.types.ConfigOptionBoolean;
 import com.github.scoliossis.base.config.types.ConfigOptionCategory;
 import com.github.scoliossis.base.config.types.ConfigOptionEnum;
 import com.github.scoliossis.base.config.types.ConfigOptionNumber;
-import com.github.scoliossis.base.screens.clickgui.ClickGUIScreenMain;
 import com.github.scoliossis.base.utils.C;
-import com.github.scoliossis.base.Main;
-import com.github.scoliossis.base.annotations.RegisterListeners;
-import com.github.scoliossis.base.commands.CommandMain;
-import com.github.scoliossis.base.config.ConfigOption;
-import com.github.scoliossis.base.config.types.ConfigOptionBoolean;
-import com.github.scoliossis.base.config.ConfigParent;
-import com.github.scoliossis.base.utils.FontUtil;
-import com.github.scoliossis.base.utils.RenderUtil;
 import lombok.AllArgsConstructor;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 import me.xdrop.fuzzywuzzy.model.ExtractedResult;
-import net.minecraftforge.common.MinecraftForge;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -27,28 +23,25 @@ public class ModuleManager {
     public static HashMap<Class<? extends Module>, ModuleWithInfo> modules = new HashMap<>();
 
     public static void init() {
-        FontUtil.loadFont(RenderUtil.FontSansSerif, true);
         registerEvents();
         CommandMain.loadCommands();
         getModules();
     }
 
     public static void registerEvents() {
-        MinecraftForge.EVENT_BUS.register(new Main());
-
         for (Class<?> clazz : C.reflections.getTypesAnnotatedWith(RegisterListeners.class)) {
             try {
-                MinecraftForge.EVENT_BUS.register(clazz.newInstance());
+                Bus.register(clazz, clazz.newInstance());
+                System.out.printf("registered: %s", clazz.getName());
             } catch (Exception e) {
                 System.out.printf("failed to load %s", clazz.getName());
+                e.printStackTrace();
             }
 
         }
     }
 
-    public static void getModules() {
-        MinecraftForge.EVENT_BUS.register(Main.class);
-
+    private static void getModules() {
         for (Class<?> clazz : C.reflections.getTypesAnnotatedWith(RegisterModule.class)) {
             try {
                 RegisterModule an = clazz.getAnnotation(RegisterModule.class);
@@ -62,7 +55,7 @@ public class ModuleManager {
 
                 loadModule(moduleWithInfo);
 
-                //Bus.register(clazz, m);
+                Bus.register(clazz, module);
                 //KeybindManager.loadBind(m);
             } catch (Exception e) {
                 System.out.printf("ERROR ERROR !!!!\nfailed to load %s", clazz);
@@ -72,8 +65,18 @@ public class ModuleManager {
     }
 
     public static <T extends Module> T getModule(Class<T> clazz) {
-        return (T) modules.get(clazz).module;
+        ModuleWithInfo module = modules.get(clazz);
+        return module == null ? null : (T) module.module;
     }
+
+    public static <T extends Module> void toggle(Class<T> clazz) {
+        Module module = ModuleManager.getModule(clazz);
+        if (module == null) return;
+
+        module.toggle();
+    }
+
+
 
     public static Module getModulesByFuzzySearch(String input) {
         List<String> mods = modules.values().stream().map(mod -> mod.annotation.name()).collect(Collectors.toList());
@@ -95,8 +98,6 @@ public class ModuleManager {
     private static void loadModule(ModuleWithInfo moduleWithInfo) {
         moduleWithInfo.module.module = moduleWithInfo.annotation;
         gatherChildren(moduleWithInfo.module);
-
-        MinecraftForge.EVENT_BUS.register(moduleWithInfo.module);
     }
 
 
@@ -167,6 +168,11 @@ public class ModuleManager {
         module.children.removeIf(configOption -> configOption.getField().getAnnotation(ConfigParent.class) != null);
     }
 
+
+    public static boolean isEnabled(Class clazz) {
+        Module mod = ModuleManager.getModule(clazz);
+        return mod != null && mod.enabled;
+    }
 
     @AllArgsConstructor
     public static class ModuleWithInfo {

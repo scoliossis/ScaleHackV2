@@ -5,8 +5,8 @@ import com.github.scoliossis.base.config.ConfigOption;
 import com.github.scoliossis.base.modules.Setting;
 import com.github.scoliossis.base.screens.clickgui.ClickGUIScreenMain;
 import com.github.scoliossis.base.utils.AnimationUtil;
-import com.github.scoliossis.base.utils.FontUtil;
 import com.github.scoliossis.base.utils.RenderUtil;
+import com.github.scoliossis.base.utils.font.FontRegistry;
 
 import java.awt.*;
 import java.lang.reflect.Field;
@@ -29,9 +29,9 @@ public class ConfigOptionCategory extends ConfigOption<Category> {
 
         onLeftClick();
 
-        float textX = x + (width/2f) - (FontUtil.getStringWidth(settingName, fontSize)/2f);
+        float textX = x + (width/2f) - (FontRegistry.getSpaceGroteskRegular18px().getStringWidth(settingName)/2f);
 
-        RenderUtil.drawStringCenteredY("&o" + settingName, textX, y + (childHeight / 2f), fontSize, new Color(238,238,238));
+        RenderUtil.drawStringCenteredY(settingName, textX, y + (childHeight / 2f), new Color(238,238,238));
 
         ClickGUIScreenMain.drawOutline(childHeight, getColor(categoryNumber));
 

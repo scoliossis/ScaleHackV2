@@ -1,15 +1,15 @@
-package com.github.scoliossis.base.Events;
+package com.github.scoliossis.base.Events.impl;
 
+import com.github.scoliossis.base.Events.Event;
 import lombok.AllArgsConstructor;
 import net.minecraft.network.Packet;
 import net.minecraftforge.fml.common.eventhandler.Cancelable;
-import net.minecraftforge.fml.common.eventhandler.Event;
 
 
 // https://www.youtube.com/watch?v=g9xopViBKOQ
 
 public class PacketEvent extends Event {
-    public static class Send extends Event  {
+    public static class Send extends Event {
 
         @Cancelable
         @AllArgsConstructor

@@ -1,10 +1,14 @@
 package com.github.scoliossis.base.modules.impl.player;
 
-import com.github.scoliossis.base.modules.ModuleCategory;
-import com.github.scoliossis.base.modules.RegisterModule;
+import com.github.scoliossis.base.Events.EventBus;
+import com.github.scoliossis.base.Events.SubscribeEvent;
+import com.github.scoliossis.base.Events.impl.MoveFlyingEvent;
 import com.github.scoliossis.base.modules.Module;
+import com.github.scoliossis.base.modules.ModuleCategory;
+import com.github.scoliossis.base.modules.ModuleManager;
+import com.github.scoliossis.base.modules.RegisterModule;
+import com.github.scoliossis.base.utils.C;
 import net.minecraft.util.MathHelper;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 @RegisterModule(
         name = "Movement Fix",
@@ -12,39 +16,20 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
         category = ModuleCategory.Player
 )
 public class MovementFixModule extends Module {
-    /*
-    private final EnumOption<MovementFixMode> mode = new EnumOption<>("Mode", MovementFixMode.Normal);
-
-    public MovementFixModule() {
-        super("Movement Fix", "the legitimacy", ModuleCategory.PLAYER);
-        this.offerOptions(this.mode);
+    public static boolean shouldMoveFix() {
+        return ModuleManager.isEnabled(MovementFixModule.class);
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(EventBus.Priority.LOWEST)
     public void onMoveFlying(MoveFlyingEvent event) {
-        event.setYaw(MovementUtil.playerYaw);
-
-        if (mode.getValue() == MovementFixMode.Awesome) {
-            if ((ClientUtil.getPlayer().onGround && !ClientUtil.getGame().gameSettings.keyBindJump.isKeyDown())
-                    || !ClientUtil.getPlayer().isSprinting()) {
-                this.fixStrafe(event);
-
-                if (ClientUtil.getPlayer().isSprinting() && event.getForward() <= 0) {
-                    event.setFriction(event.getFriction() / 1.3f);
-                    ClientUtil.getPlayer().setSprinting(false);
-                }
-            }
-        }
-    }
-
-    @SubscribeEvent
-    public void onJumpEvent(JumpEvent event) {
-        event.setYaw(MovementUtil.playerYaw);
+        //if (mode.getValue() == MovementFixMode.Awesome) {
+        fixStrafe(event);
+        //}
     }
 
     // pasted from idk where, but it was in mushroom so its mine now
     private void fixStrafe(MoveFlyingEvent event) {
-        int dif = (int) ((MathHelper.wrapAngleTo180_float(ClientUtil.getPlayer().rotationYaw - event.getYaw()
+        int dif = (int) ((MathHelper.wrapAngleTo180_float(C.p().rotationYaw - event.getYaw()
                 - 158.5f) + 180.0f) / 45f);
 
         float strafe = event.getStrafe();
@@ -108,7 +93,6 @@ public class MovementFixModule extends Module {
         event.setForward(calcForward);
         event.setStrafe(calcStrafe);
     }
-     */
 
     @Override
     protected void onEnable() {

@@ -1,11 +1,11 @@
 package com.github.scoliossis.base.commands;
 
-import com.github.scoliossis.base.utils.C;
-import com.github.scoliossis.base.Events.PacketEvent;
+import com.github.scoliossis.base.Events.SubscribeEvent;
+import com.github.scoliossis.base.Events.impl.PacketEvent;
 import com.github.scoliossis.base.annotations.RegisterListeners;
+import com.github.scoliossis.base.utils.C;
 import com.github.scoliossis.base.utils.ChatUtil;
 import net.minecraft.network.play.client.C01PacketChatMessage;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.ArrayList;
 
@@ -23,7 +23,7 @@ public class CommandMain {
             if (message.startsWith(commandPrefix) && !message.startsWith(commandPrefix+commandPrefix)) {
                 handleCommand(message.substring(1));
 
-                event.setCanceled(true);
+                event.cancel();
             }
         }
     }
