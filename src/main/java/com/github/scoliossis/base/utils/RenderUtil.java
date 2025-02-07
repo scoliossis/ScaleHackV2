@@ -7,10 +7,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.event.RenderLivingEvent;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -339,6 +336,16 @@ public class RenderUtil {
         finish2d();
     }
 
+    static float easeInOutExpo(double x) {
+        return x == 0
+                ? 0
+                : (float) (x == 1
+                ? 1
+                : x < 0.5 ? Math.pow(2, 20 * x - 10) / 2
+                : (2 - Math.pow(2, -20 * x + 10)) / 2);
+
+    }
+
     public static void drawTexture(ResourceLocation resourceLocation, float x, float y, float w, float h) {
         drawTexture(resourceLocation, x, y, w, h, w, h, 0, 0);
     }
@@ -610,8 +617,8 @@ public class RenderUtil {
     }
 
     // ew, so many
-    public static void drawString(String string, float x, float y, Color color) {
-        FontRegistry.getSpaceGroteskRegular18px().drawString(string, x, y, color);
+    public static void drawString(String string, float x, float y, Color color, int size) {
+        FontRegistry.drawString(string, x, y, color, size);
     }
 
     public static void drawStringCenteredY(String string, float x, float y, Color color) {
@@ -772,35 +779,5 @@ public class RenderUtil {
         addRectVertex(-width/2f,0,width,height, color);
 
         render3Dend();
-    }
-
-    public static void renderNametag(Entity ent, RenderLivingEvent.Specials.Pre<EntityLivingBase> event, Color color, boolean pitch) {
-        float x = (float) event.x;
-        float y = (float) (event.y+2.4f);
-        float z = (float) event.z;
-
-
-        render3Dstart();
-        GL11.glTranslated(x, y, z);
-
-        GL11.glRotatef(-C.mc.getRenderManager().playerViewY, 0, 1, 0);
-        //GL11.glRotatef(C.mc.getRenderManager().playerViewX, 1, 0, 0);
-        GL11.glRotatef(180, 0,0,1);
-
-        String name = ent.getName();
-
-        GL11.glNormal3f(0.0f, 1.0f, 0.0f);
-
-        float extraW = 0.15f;
-        float width = FontRegistry.getSpaceGroteskRegular18px().getStringWidth(name) + extraW;
-
-        addRectVertex(-width/2f - extraW/2f,0,width,0.35f, color);
-
-        RenderUtil.drawString("&s"+name, -width/2f,-0.03f, new Color(0xfffffff));
-
-        finish2d();
-
-        GL11.glPopMatrix();
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
     }
 }

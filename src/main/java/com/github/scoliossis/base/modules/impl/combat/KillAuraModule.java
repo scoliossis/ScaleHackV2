@@ -10,7 +10,7 @@ import com.github.scoliossis.base.modules.Setting;
 
 @RegisterModule(
         name = "Kill Aura",
-        description = "Now, I am become Death, the destroyer of worlds.",
+        description = "Now, I am become Death,\nthe destroyer of worlds.",
         category = ModuleCategory.Combat
 )
 public class KillAuraModule extends Module {

@@ -41,18 +41,23 @@ public abstract class Module {
         return enabled;
     }
 
-    static int stringIndentLeft = 9;
+    private Color moduleToggledColor = new Color(2, 159, 95);
+    private Color moduleDisabledColor = new Color(108, 3, 3);
 
     public void draw(int categoryNumber) {
         Color color = getColor(categoryNumber);
 
+        moduleToggledColor = new Color(87, 3, 126);
+        moduleDisabledColor = new Color(38, 3, 65);
+
         String settingName = formatSettingName(this.module.name());
 
         // draw background
-        RenderUtil.drawRect(x, y, width, moduleHeight, new Color(26,26,26));
+        RenderUtil.drawRect(x,y,width,moduleHeight+moduleGap+5,moduleColor);
 
         // draw button
-        RenderUtil.drawRect(x + xOff, y, width - xOff*2, moduleHeight, new Color(37,37,37));
+        RenderUtil.drawRoundedRect(x+xOff, y, width-xOff*2, moduleHeight, moduleRadius, moduleOutlineColor);
+        RenderUtil.drawRoundedRect(x+xOff+1, y+1, width-xOff*2-2, moduleHeight-2, moduleRadius-2, moduleColor);
 
         String animationKey = getAnimationKey();
         AnimationUtil.Animation clickedInfo = AnimationUtil.getAnimation(animationKey);
@@ -68,16 +73,33 @@ public abstract class Module {
             }
         }
 
-        // draws the box filling
-        drawToggledModule(clickedInfo, categoryNumber);
+        int textY = y + 10;
+
+        int xOfEnabledButton = x + xOff + 10 + FontRegistry.getSpaceGroteskRegular18px().getStringWidth(moduleTitleModifiers + settingName);
+        int yOfEnabledButton = textY-2;
+        int sliderWidth = 24;
+        int sliderHeight = 10;
+
+        int sliderBallSize = 8;
+
+        RenderUtil.drawRoundedRect(
+                xOfEnabledButton,
+                yOfEnabledButton, sliderWidth, sliderHeight, sliderHeight,
+                this.enabled ? moduleToggledColor : moduleDisabledColor
+        );
+
+        RenderUtil.drawRoundedRect(
+                xOfEnabledButton + (this.enabled ? sliderWidth-sliderBallSize-2 : 2),
+                yOfEnabledButton + sliderHeight / 2f - sliderBallSize / 2f,
+                sliderBallSize, sliderBallSize, sliderBallSize,
+                new Color(0xffffffff)
+        );
 
         // draw text
-        RenderUtil.drawStringCenteredY(settingName, x + width - stringIndentLeft - FontRegistry.getSpaceGroteskRegular18px().getStringWidth(settingName), y + (moduleHeight / 2f), new Color(0xEEEEEE));
+        RenderUtil.drawString(moduleTitleModifiers + settingName, x + xOff + 5, textY, stringColor, 18);
+        RenderUtil.drawString(this.module.description(), x + xOff + 5, textY + 15, descriptionColor, 12);
 
-        // draws walls
-        drawOutline(moduleHeight, color);
-
-        RenderUtil.enableTranslate(0, moduleHeight);
+        RenderUtil.enableTranslate(0, moduleHeight + moduleGap);
     }
 
     private AnimationUtil.Animation onLeftClick(AnimationUtil.Animation clickedInfo, String animationKey) {

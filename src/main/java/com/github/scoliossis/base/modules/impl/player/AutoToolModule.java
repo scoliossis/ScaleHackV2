@@ -6,7 +6,7 @@ import com.github.scoliossis.base.modules.RegisterModule;
 
 @RegisterModule(
         name = "Auto Tool",
-        description = "make sure you have the right tool for the job",
+        description = "make sure you have the right tool\nfor the job",
         category = ModuleCategory.Player
 )
 public class AutoToolModule extends Module {

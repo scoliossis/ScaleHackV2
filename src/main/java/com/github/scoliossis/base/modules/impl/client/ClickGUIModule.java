@@ -11,21 +11,21 @@ import java.util.ArrayList;
 
 @RegisterModule(
         name = "Click GUI",
-        description = "Now, I am become Death, the destroyer of worlds.",
+        description = "Evil GUI",
         category = ModuleCategory.Client
 )
 public class ClickGUIModule extends Module {
     public static int scrolledAmount = 0;
 
     public static long[] categoryDragTimes = new long[ModuleCategory.values().length];
-    public static int[][] categoryPos = new int[][] {
-            {10,10},
-            {160,10},
-            {310,10},
-            {460,10},
-            {610,10},
-            {760,10},
-    };
+    public static int[][] categoryPos = new int[ModuleCategory.values().length][2];
+
+    static {
+        for (int i = 0; i < ModuleCategory.values().length; i++) {
+            categoryPos[i][0] = (i * ClickGUIScreenMain.width) + (i * 20) + 20;
+            categoryPos[i][1] = 20;
+        }
+    }
 
     public static Color[] categoryColors = new Color[] {
             // these were all ints in the old scalehack, too lazy to convert

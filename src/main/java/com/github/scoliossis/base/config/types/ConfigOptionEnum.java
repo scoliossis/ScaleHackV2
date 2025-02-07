@@ -2,7 +2,6 @@ package com.github.scoliossis.base.config.types;
 
 import com.github.scoliossis.base.config.ConfigOption;
 import com.github.scoliossis.base.modules.Setting;
-import com.github.scoliossis.base.screens.clickgui.ClickGUIScreenMain;
 import com.github.scoliossis.base.utils.RenderUtil;
 import com.github.scoliossis.base.utils.font.FontRegistry;
 import lombok.Getter;
@@ -25,16 +24,13 @@ public class ConfigOptionEnum<T> extends ConfigOption<T> {
         String settingName = formatSettingName(this.name());
 
         // draw background
-        RenderUtil.drawRect(x, y, width, moduleHeight, new Color(26,26,26));
         RenderUtil.drawRect(x+xOff, y, width-xOff*2, childHeight, getBackgroundColor(this));
 
         String mode = formatSettingName(this.getOption().name);
 
-        RenderUtil.drawStringCenteredY(settingName + "   -   " + mode, x + 5, y + (childHeight / 2f), new Color(0xEEEEEE));
+        RenderUtil.drawStringCenteredY(settingName + "   -   " + mode, x + 5, y + (childHeight / 2f), stringColor);
 
         Color color = getColor(categoryNumber);
-
-        ClickGUIScreenMain.drawOutline(childHeight, color);
 
         onClickMain();
         if (shownModes.contains(this)) drawModes(color);
@@ -94,12 +90,9 @@ public class ConfigOptionEnum<T> extends ConfigOption<T> {
             stringX += FontRegistry.getSpaceGroteskRegular18px().getStringWidth(settingName);
         }
 
-        drawOutline(stringY, color);
-
         //yOffset -= (oldY-y);
         //categoryHeights.set(index, yOffset);
         RenderUtil.enableTranslate(0, stringY);
-        drawOutline(stringY, color);
     }
 
 

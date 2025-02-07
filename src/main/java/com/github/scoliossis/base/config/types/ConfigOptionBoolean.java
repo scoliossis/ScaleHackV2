@@ -2,7 +2,6 @@ package com.github.scoliossis.base.config.types;
 
 import com.github.scoliossis.base.config.ConfigOption;
 import com.github.scoliossis.base.modules.Setting;
-import com.github.scoliossis.base.screens.clickgui.ClickGUIScreenMain;
 import com.github.scoliossis.base.utils.AnimationUtil;
 import com.github.scoliossis.base.utils.RenderUtil;
 
@@ -24,7 +23,6 @@ public class ConfigOptionBoolean extends ConfigOption<Boolean> {
         String settingName = formatSettingName(this.name());
 
         // draw background
-        RenderUtil.drawRect(x, y, width, moduleHeight, new Color(26,26,26));
         RenderUtil.drawRect(x+xOff, y, width-xOff*2, childHeight, getBackgroundColor(this));
 
         // if hovering over button
@@ -33,9 +31,7 @@ public class ConfigOptionBoolean extends ConfigOption<Boolean> {
         // draws a growing square infront of a white one, square grows until behind square is filled
         drawEnabledBox(categoryNumber);
 
-        RenderUtil.drawStringCenteredY(settingName, x + 5, y + (childHeight / 2f), new Color(238,238,238));
-
-        ClickGUIScreenMain.drawOutline(childHeight, getColor(categoryNumber));
+        RenderUtil.drawStringCenteredY(settingName, x + 5, y + (childHeight / 2f), stringColor);
 
         RenderUtil.enableTranslate(0, childHeight);
 
@@ -51,8 +47,8 @@ public class ConfigOptionBoolean extends ConfigOption<Boolean> {
         float smallSquareX = x + width - 20;
         float smallSquareY = y + childHeight / 2f - boxSize / 2f;
 
-        // draws a white box
-        RenderUtil.drawRoundedRect(smallSquareX, smallSquareY, boxSize, boxSize, 1, new Color(255, 255, 255));
+        // draws a small box to be filled
+        RenderUtil.drawRoundedRect(smallSquareX, smallSquareY, boxSize, boxSize, 1, new Color(0, 0, 0));
 
         // if setting enabled + animation done
         float size = (float) AnimationUtil.getEasingAnimation(getAnimationKey());

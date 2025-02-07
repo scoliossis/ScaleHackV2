@@ -3,6 +3,9 @@ package com.github.scoliossis.base.utils.font;
 import com.github.scoliossis.base.utils.C;
 import net.minecraft.util.ResourceLocation;
 
+import java.awt.*;
+import java.util.HashMap;
+
 public class FontRegistry {
     private static int fixFontSize(int size, float scale) {
         if (scale - ((int) scale) == 0f) { // if scale == 1 (mc:2), == 2 (mc:4), == 3 (mc:6), and so on
@@ -59,35 +62,22 @@ public class FontRegistry {
             scale = 1f;
         }
 
-        // godly.
-        switch (fontName) {
-            case "SpaceGrotesk-Regular":
-                switch (ogSize) {
-                    case 14:
-                        if (!validFont(spaceGroteskRegular14px, ogSize)) {
-                            spaceGroteskRegular14px = createNewFont(spaceGroteskRegular, ogSize, scale);
-                        }
-                        return spaceGroteskRegular14px;
-                    case 18:
-                        if (!validFont(spaceGroteskRegular18px, ogSize)) {
-                            spaceGroteskRegular18px = createNewFont(spaceGroteskRegular, ogSize, scale);
-                        }
-                        return spaceGroteskRegular18px;
-                }
-                break;
+        if (!fonts.containsKey(ogSize)) {
+            fonts.put(ogSize, createNewFont(spaceGroteskRegular, ogSize, scale));
         }
-
-        // This should never happen BUT in the off chance it does
-        return new CustomFontRenderer(new ResourceLocation("null"), 20f);
+        CustomFontRenderer font =  fonts.get(ogSize);
+        if (!validFont(font, ogSize)) {
+            fonts.remove(ogSize);
+            fonts.put(ogSize, createNewFont(spaceGroteskRegular, ogSize, scale));
+        }
+        return fonts.get(ogSize);
     }
 
     // Textures
     private static final ResourceLocation spaceGroteskRegular =
             new ResourceLocation("scalehack:fonts/spacegrotesk/regular.ttf");
 
-    // Font objects
-    private static CustomFontRenderer spaceGroteskRegular14px = createNewFont(spaceGroteskRegular, 14, 1f);
-    private static CustomFontRenderer spaceGroteskRegular18px = createNewFont(spaceGroteskRegular, 18, 1f);
+    static HashMap<Integer, CustomFontRenderer> fonts = new HashMap<>();
 
     // Getters
     public static CustomFontRenderer getSpaceGroteskRegular14px() {
@@ -96,5 +86,13 @@ public class FontRegistry {
 
     public static CustomFontRenderer getSpaceGroteskRegular18px() {
         return getFont("SpaceGrotesk-Regular", 18);
+    }
+
+    public static int getStringWidth(String string, int size) {
+        return getFont("SpaceGrotesk-Regular", size).getStringWidth(string);
+    }
+
+    public static void drawString(String string, float x, float y, Color color, int size) {
+        getFont("SpaceGrotesk-Regular", size).drawString(string,x,y,color);
     }
 }

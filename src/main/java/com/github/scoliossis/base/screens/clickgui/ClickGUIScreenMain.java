@@ -20,28 +20,41 @@ public class ClickGUIScreenMain extends GuiScreen {
     }
 
 
-    public static float fontSize = 0.1f;
-    public static int width = 120;
+    public static int width = 164;
     public static int x = -width/2;
     public static int y = 0;
 
-    public static int xOff = 4;
+    public static int xOff = 10;
 
     public static int outlineWidth = 1;
 
     public static int mX, mY;
 
-    static int height = 20;
+    static int height = 40;
 
-    public static int moduleHeight = 16;
+    public static int moduleHeight = 40;
 
-    public static int childHeight = 13;
+    public static int childHeight = 20;
 
     public static Category currentDraggingCategory;
+
+    public static Color stringColor = new Color(255,255,255);
+    public static Color descriptionColor = new Color(200,200,200);
+    public static Color moduleColor = new Color(22,22,22);
+    public static Color moduleOutlineColor = new Color(30,30,30);
+
+    public static String headerModifiers = "§l";
+    public static String moduleTitleModifiers = "§l";
+
+    public static int moduleGap = 5;
+    public static int moduleRadius = 5;
+
+    public static int outlineRadius = 10;
 
     // DRAWING
     @Override
     public void drawScreen(int mX, int mY, float partialTicks) {
+        moduleHeight = 40;
         ClickGUIScreenMain.mX = mX; ClickGUIScreenMain.mY = mY;
 
         // how far scrolled since last tick
@@ -93,35 +106,31 @@ public class ClickGUIScreenMain extends GuiScreen {
 
     private void drawHeader(int categoryNumber) {
         ModuleCategory category = ModuleCategory.values()[categoryNumber];
-        Color color = ClickGUIModule.categoryColors[categoryNumber];
+        Color color = getColor(categoryNumber);
 
         // background and title name
-        RenderUtil.drawRect(x, y, width, height, new Color(26,26,26));
-        RenderUtil.drawStringCenteredY(formatSettingName(category.name()), x + 5, y + (height/2f), new Color(0xffffff));
-
-        // outline at top
-        RenderUtil.drawRect(x, y, width, ClickGUIScreenMain.outlineWidth, color);
-
-        // draws cool outline on sides
-        RenderUtil.drawRect(x, y, ClickGUIScreenMain.outlineWidth, height+ClickGUIScreenMain.outlineWidth, color);
-        RenderUtil.drawRect(x+width-ClickGUIScreenMain.outlineWidth, y, ClickGUIScreenMain.outlineWidth, height+ClickGUIScreenMain.outlineWidth, color);
+        RenderUtil.drawRoundedRect(x, y, width, height + outlineRadius, outlineRadius, moduleColor);
+        RenderUtil.drawStringCenteredY(headerModifiers + formatSettingName(category.name()), x + 10, y + (height/2f), stringColor);
 
         // offset
         RenderUtil.enableTranslate(0, height);
     }
 
     private void drawFooter(int categoryNumber) {
-        Color color = ClickGUIModule.categoryColors[categoryNumber];
-        RenderUtil.drawRect(x, y, width, xOff, new Color(26,26,26));
+        Color color = getColor(categoryNumber);
+        //RenderUtil.drawRect(x, y, width, xOff, innerOutlineColor);
 
-        RenderUtil.drawRect(x, y, outlineWidth, xOff, color);
-        RenderUtil.drawRect(x+width-outlineWidth, y, outlineWidth, xOff, color);
+        //RenderUtil.drawRect(x, y, outlineWidth, xOff, color);
+        //RenderUtil.drawRect(x+width-outlineWidth, y, outlineWidth, xOff, color);
+        //RenderUtil.drawRect(x, y + xOff, width, outlineWidth, color);
 
-        RenderUtil.drawRect(x, y + xOff, width, outlineWidth, color);
+        RenderUtil.drawRoundedRect(x, y, width, outlineRadius, outlineRadius, moduleColor);
     }
 
+    // gets color of category.
     public static Color getColor(int categoryNumber) {
-        return ClickGUIModule.categoryColors[categoryNumber];
+        return new Color(22,22,22);
+        //return ClickGUIModule.categoryColors[categoryNumber];
     }
 
     // functions to compact code!
@@ -192,8 +201,8 @@ public class ClickGUIScreenMain extends GuiScreen {
 
 
     public static String formatSettingName(String settingName) {
-        //return settingName;
-        return settingName.toLowerCase().replaceAll(" ", "").replaceAll("_", "");
+        return settingName;
+        //return settingName.toLowerCase().replaceAll(" ", "").replaceAll("_", "");
     }
 
     public static int getParentsNumber(ConfigOption<?> setting) {
@@ -208,27 +217,23 @@ public class ClickGUIScreenMain extends GuiScreen {
     }
 
     public static Color getBackgroundColor(ConfigOption<?> configOption, int extra) {
-        switch (getParentsNumber(configOption) + extra) {
-            case 0:
-                return new Color(20,20,20);
-            case 1:
-                return new Color(15, 15, 15);
-            case 2:
-                return new Color(10, 10, 10);
-            default:
-                return new Color(0, 0, 0);
-        }
+        return new Color(0xffffffff);
+
+        //switch (getParentsNumber(configOption) + extra) {
+        //    case 0:
+        //        return new Color(20,20,20);
+        //    case 1:
+        //        return new Color(15, 15, 15);
+        //    case 2:
+        //        return new Color(10, 10, 10);
+        //    default:
+        //        return new Color(0, 0, 0);
+        //}
     }
 
     public static Color getBackgroundColor(ConfigOption<?> configOption) {
         return getBackgroundColor(configOption, 0);
     }
-
-    public static void drawOutline(int height, Color color) {
-        RenderUtil.drawRect(x, y, outlineWidth, height, color);
-        RenderUtil.drawRect(x+width-outlineWidth, y, outlineWidth, height, color);
-    }
-
 
     public static boolean isHovered(int mX, int mY, float x, float y, float w, float h) {
         float[] pointsXY = RenderUtil.scalePoints(x, y);

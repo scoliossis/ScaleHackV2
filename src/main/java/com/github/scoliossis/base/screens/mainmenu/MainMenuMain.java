@@ -40,13 +40,13 @@ public class MainMenuMain extends GuiScreen {
 
 
         String clientNameText = Main.CLIENT_NAME + " " + Main.MOD_VERSION;
-        float textW = FontRegistry.getSpaceGroteskRegular18px().getStringWidth(clientNameText);
+        float textW = FontRegistry.getStringWidth(clientNameText, 40);
         float textX = screenWidth/2f - textW/2;
         float textY = y+10;
 
         //RenderUtil.drawGlow(textX-10, textY, textW+20, textH, 10, new Color(150,150,150));
         RenderUtil.drawRoundedRect(x, y, w, h, 5, new Color(10,10,10, 150));
-        RenderUtil.drawString(clientNameText, textX, textY, new Color(0xffffffff));
+        RenderUtil.drawString(clientNameText, textX, textY, new Color(0xffffffff), 40);
 
         for (int i = 0; i < strings.length; i++) {
             String string = strings[i];

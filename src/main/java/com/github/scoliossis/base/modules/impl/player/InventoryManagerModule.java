@@ -6,7 +6,7 @@ import com.github.scoliossis.base.modules.RegisterModule;
 
 @RegisterModule(
         name = "Inventory Manager",
-        description = "only stupid people try the medicine drug, you are stupid.",
+        description = "only stupid people try the medicine\ndrug, you are stupid.",
         category = ModuleCategory.Player
 )
 public class InventoryManagerModule extends Module {

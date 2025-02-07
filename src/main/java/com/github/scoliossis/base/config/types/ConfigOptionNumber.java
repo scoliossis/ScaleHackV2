@@ -7,7 +7,6 @@ import com.github.scoliossis.base.utils.MathUtil;
 import com.github.scoliossis.base.utils.RenderUtil;
 import com.github.scoliossis.base.utils.font.FontRegistry;
 
-import java.awt.*;
 import java.lang.reflect.Field;
 
 import static com.github.scoliossis.base.screens.clickgui.ClickGUIScreenMain.*;
@@ -24,7 +23,6 @@ public class ConfigOptionNumber<T> extends ConfigOption<T> {
     public void draw(int categoryNumber) {
         String settingName = formatSettingName(this.name());
         // draw background
-        RenderUtil.drawRect(x, y, width, moduleHeight, new Color(26,26,26));
         RenderUtil.drawRect(x+xOff, y, width-xOff*2, childHeight, getBackgroundColor(this));
 
         // u cant cast Integer or any other non-primitive to double, so make it a string, and parse.
@@ -39,10 +37,8 @@ public class ConfigOptionNumber<T> extends ConfigOption<T> {
         RenderUtil.drawRect(x + xOff, y + 2, (float) currentSliderNumber, childHeight - 4, getColor(categoryNumber));
 
 
-        RenderUtil.drawStringCenteredY(settingName, x + 5, y + (childHeight / 2f), new Color(0xEEEEEE));
-        RenderUtil.drawStringCenteredY(""+settingNumber, x + width - FontRegistry.getSpaceGroteskRegular18px().getStringWidth("&o" + settingNumber), y + (childHeight / 2f), new Color(0xEEEEEE));
-
-        ClickGUIScreenMain.drawOutline(childHeight, getColor(categoryNumber));
+        RenderUtil.drawStringCenteredY(settingName, x + 5, y + (childHeight / 2f), stringColor);
+        RenderUtil.drawStringCenteredY(""+settingNumber, x + width - FontRegistry.getSpaceGroteskRegular18px().getStringWidth("&o" + settingNumber), y + (childHeight / 2f), stringColor);
 
         RenderUtil.enableTranslate(0, childHeight);
 

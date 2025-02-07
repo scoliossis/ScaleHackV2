@@ -6,7 +6,7 @@ import com.github.scoliossis.base.modules.RegisterModule;
 
 @RegisterModule(
         name = "No Slowdown",
-        description = "In Discordia, you can't let the opps slow you down :speaking_head::fire::fire:",
+        description = "In Discordia, you can't let the opps\nslow you down :speaking_head::fire:",
         category = ModuleCategory.Movement
 )
 public class NoSlowdownModule extends Module {

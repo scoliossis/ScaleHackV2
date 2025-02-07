@@ -6,7 +6,7 @@ import com.github.scoliossis.base.modules.RegisterModule;
 
 @RegisterModule(
         name = "Free Look",
-        description = "\"erm, acktually, this is banned on hypixel!1!11§!±§1\"",
+        description = "\"erm, acktually, this is banned\non hypixel!1!11!\"",
         category = ModuleCategory.Render
 )
 public class FreeLookModule extends Module {

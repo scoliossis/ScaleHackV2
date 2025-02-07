@@ -6,7 +6,7 @@ import com.github.scoliossis.base.modules.RegisterModule;
 
 @RegisterModule(
         name = "Block ESP",
-        description = "targetfinder activated (except you are the targetfinder)",
+        description = "targetfinder activated\n(except you are the targetfinder)",
         category = ModuleCategory.Render
 )
 public class BlockESPModule extends Module {

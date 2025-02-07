@@ -6,7 +6,7 @@ import com.github.scoliossis.base.modules.RegisterModule;
 
 @RegisterModule(
         name = "Hilarity",
-        description = "this has NOTHING to do with Hilary Clinton",
+        description = "this has NOTHING to do\nwith Hilary Clinton",
         category = ModuleCategory.Render
 )
 public class HilarityModule extends Module {

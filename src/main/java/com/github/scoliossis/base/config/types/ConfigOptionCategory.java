@@ -3,12 +3,10 @@ package com.github.scoliossis.base.config.types;
 import com.github.scoliossis.base.config.Category;
 import com.github.scoliossis.base.config.ConfigOption;
 import com.github.scoliossis.base.modules.Setting;
-import com.github.scoliossis.base.screens.clickgui.ClickGUIScreenMain;
 import com.github.scoliossis.base.utils.AnimationUtil;
 import com.github.scoliossis.base.utils.RenderUtil;
 import com.github.scoliossis.base.utils.font.FontRegistry;
 
-import java.awt.*;
 import java.lang.reflect.Field;
 
 import static com.github.scoliossis.base.screens.clickgui.ClickGUIScreenMain.*;
@@ -24,16 +22,13 @@ public class ConfigOptionCategory extends ConfigOption<Category> {
         String settingName = formatSettingName(this.name());
 
         // draw background
-        RenderUtil.drawRect(x, y, width, moduleHeight, new Color(26,26,26));
         RenderUtil.drawRect(x+xOff, y, width-xOff*2, childHeight, getBackgroundColor(this));
 
         onLeftClick();
 
         float textX = x + (width/2f) - (FontRegistry.getSpaceGroteskRegular18px().getStringWidth(settingName)/2f);
 
-        RenderUtil.drawStringCenteredY(settingName, textX, y + (childHeight / 2f), new Color(238,238,238));
-
-        ClickGUIScreenMain.drawOutline(childHeight, getColor(categoryNumber));
+        RenderUtil.drawStringCenteredY(settingName, textX, y + (childHeight / 2f), stringColor);
 
         RenderUtil.enableTranslate(0,childHeight);
 

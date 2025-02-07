@@ -8,7 +8,7 @@ import com.github.scoliossis.base.modules.RegisterModule;
 
 @RegisterModule(
         name = "Show Rotations",
-        description = "you spin me right round baby right round",
+        description = "you spin me right round\nbaby right round",
         category = ModuleCategory.Client
 )
 public class ShowRotationsModule extends Module {
