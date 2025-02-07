@@ -54,7 +54,6 @@ public class ClickGUIScreenMain extends GuiScreen {
     // DRAWING
     @Override
     public void drawScreen(int mX, int mY, float partialTicks) {
-        moduleHeight = 40;
         ClickGUIScreenMain.mX = mX; ClickGUIScreenMain.mY = mY;
 
         // how far scrolled since last tick

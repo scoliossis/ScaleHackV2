@@ -73,31 +73,30 @@ public abstract class Module {
             }
         }
 
-        int textY = y + 10;
+        int textY = y + moduleHeight / 2;
 
         int xOfEnabledButton = x + xOff + 10 + FontRegistry.getSpaceGroteskRegular18px().getStringWidth(moduleTitleModifiers + settingName);
-        int yOfEnabledButton = textY-2;
-        int sliderWidth = 24;
-        int sliderHeight = 10;
+        int toggleButtonWidth = 24;
+        int toggleButtonHeight = 10;
+        int yOfEnabledButton = textY - toggleButtonHeight / 2;
 
         int sliderBallSize = 8;
 
         RenderUtil.drawRoundedRect(
                 xOfEnabledButton,
-                yOfEnabledButton, sliderWidth, sliderHeight, sliderHeight,
+                yOfEnabledButton, toggleButtonWidth, toggleButtonHeight, toggleButtonHeight,
                 this.enabled ? moduleToggledColor : moduleDisabledColor
         );
 
         RenderUtil.drawRoundedRect(
-                xOfEnabledButton + (this.enabled ? sliderWidth-sliderBallSize-2 : 2),
-                yOfEnabledButton + sliderHeight / 2f - sliderBallSize / 2f,
+                xOfEnabledButton + (this.enabled ? toggleButtonWidth-sliderBallSize-2 : 2),
+                yOfEnabledButton + toggleButtonHeight / 2f - sliderBallSize / 2f,
                 sliderBallSize, sliderBallSize, sliderBallSize,
                 new Color(0xffffffff)
         );
 
         // draw text
-        RenderUtil.drawString(moduleTitleModifiers + settingName, x + xOff + 5, textY, stringColor, 18);
-        RenderUtil.drawString(this.module.description(), x + xOff + 5, textY + 15, descriptionColor, 12);
+        RenderUtil.drawStringCenteredY(moduleTitleModifiers + settingName, x + xOff + 5, textY, stringColor);
 
         RenderUtil.enableTranslate(0, moduleHeight + moduleGap);
     }
