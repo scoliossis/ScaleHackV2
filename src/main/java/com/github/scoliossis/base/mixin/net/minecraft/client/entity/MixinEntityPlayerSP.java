@@ -3,6 +3,7 @@ package com.github.scoliossis.base.mixin.net.minecraft.client.entity;
 import com.github.scoliossis.base.Events.Bus;
 import com.github.scoliossis.base.Events.impl.MotionEvent;
 import com.github.scoliossis.base.Events.impl.PlayerTickEvent;
+import com.github.scoliossis.base.modules.impl.movement.SprintModule;
 import com.github.scoliossis.base.utils.MovementUtil;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.client.entity.AbstractClientPlayer;
@@ -49,14 +50,13 @@ public abstract class MixinEntityPlayerSP extends AbstractClientPlayer {
      */
     @Overwrite
     public void setSprinting(boolean p_setSprinting_1_) {
-        // TODO: impl sprint module
-//        if (ClientUtil.getPlayer() != null && this.getEntityId() == ClientUtil.getPlayer().getEntityId()
-//                && Sprint.shouldSprint()) {
-//            p_setSprinting_1_ = Sprint.sprintOverride();
-//        }
 
-        super.setSprinting(p_setSprinting_1_);
-        this.sprintingTicksLeft = p_setSprinting_1_ ? 600 : 0;
+        if (p_setSprinting_1_ != SprintModule.isSprinting()) {
+            p_setSprinting_1_ = SprintModule.isSprinting();
+
+            super.setSprinting(p_setSprinting_1_);
+            this.sprintingTicksLeft = p_setSprinting_1_ ? 600 : 0;
+        }
     }
 
     /**
