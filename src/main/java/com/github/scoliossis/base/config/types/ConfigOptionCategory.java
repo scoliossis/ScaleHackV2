@@ -33,8 +33,15 @@ public class ConfigOptionCategory extends ConfigOption<Category> {
         RenderUtil.enableTranslate(0,childHeight);
 
         // draw children of this child.
-        if (this.get().open)
+
+        float size = (float) AnimationUtil.getEasingAnimation(getAnimationKey());
+        if (this.get().open && AnimationUtil.getAnimation(getAnimationKey()) == null) size = 1;
+
+        if (size != 0) {
+            RenderUtil.enableScale(1, size);
             for (ConfigOption<?> child : this.children) child.draw(categoryNumber);
+            if (size != 1) RenderUtil.disableScale();
+        }
     }
 
 

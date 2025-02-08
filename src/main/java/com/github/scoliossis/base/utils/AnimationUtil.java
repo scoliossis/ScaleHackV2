@@ -83,9 +83,9 @@ public class AnimationUtil {
 
         // if animation going backwards, return reverse
         if (!animation.forward)
-            return easeInCirc((double) ((animation.startTime + animationTime) - System.currentTimeMillis()) / animationTime);
+            return easeInOutCubic((double) ((animation.startTime + animationTime) - System.currentTimeMillis()) / animationTime);
 
-        return easeInCirc((double) (System.currentTimeMillis() - animation.startTime) / animationTime);
+        return easeInOutCubic((double) (System.currentTimeMillis() - animation.startTime) / animationTime);
     }
 
     @AllArgsConstructor

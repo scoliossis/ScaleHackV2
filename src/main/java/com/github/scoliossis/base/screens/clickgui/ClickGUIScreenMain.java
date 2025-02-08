@@ -6,6 +6,7 @@ import com.github.scoliossis.base.modules.Module;
 import com.github.scoliossis.base.modules.ModuleCategory;
 import com.github.scoliossis.base.modules.ModuleManager;
 import com.github.scoliossis.base.modules.impl.client.ClickGUIModule;
+import com.github.scoliossis.base.utils.AnimationUtil;
 import com.github.scoliossis.base.utils.C;
 import com.github.scoliossis.base.utils.RenderUtil;
 import net.minecraft.client.gui.GuiScreen;
@@ -93,8 +94,13 @@ public class ClickGUIScreenMain extends GuiScreen {
 
             module.draw(categoryNumber);
 
-            // draw children!
-            if (ClickGUIModule.rightClickedModules.contains(module)) {
+            float size = (float) AnimationUtil.getEasingAnimation(module.getAltAnimationKey());
+            if (ClickGUIModule.rightClickedModules.contains(module) && AnimationUtil.getAnimation(module.getAltAnimationKey()) == null) size = 1;
+
+            if (size != 0) {
+                RenderUtil.enableScale(1, size);
+
+                // draw children!
                 for (ConfigOption<?> child : module.children) {
                     if (child == null) {
                         System.out.println("bro why " + module.module.name());
@@ -102,6 +108,8 @@ public class ClickGUIScreenMain extends GuiScreen {
                     }
                     child.draw(categoryNumber);
                 }
+
+                RenderUtil.disableScale();
             }
 
             // draws box outline!
@@ -228,25 +236,6 @@ public class ClickGUIScreenMain extends GuiScreen {
         }
 
         return parents;
-    }
-
-    public static Color getBackgroundColor(ConfigOption<?> configOption, int extra) {
-        return new Color(0xffffffff);
-
-        //switch (getParentsNumber(configOption) + extra) {
-        //    case 0:
-        //        return new Color(20,20,20);
-        //    case 1:
-        //        return new Color(15, 15, 15);
-        //    case 2:
-        //        return new Color(10, 10, 10);
-        //    default:
-        //        return new Color(0, 0, 0);
-        //}
-    }
-
-    public static Color getBackgroundColor(ConfigOption<?> configOption) {
-        return getBackgroundColor(configOption, 0);
     }
 
     public static boolean isHovered(int mX, int mY, float x, float y, float w, float h) {

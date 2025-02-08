@@ -42,8 +42,6 @@ public abstract class Module {
     }
 
     public void draw(int categoryNumber) {
-        Color color = getColor(categoryNumber);
-
         String settingName = formatSettingName(this.module.name());
 
         // draw background
@@ -76,14 +74,21 @@ public abstract class Module {
 
         int sliderBallSize = 8;
 
+        float size = (float) AnimationUtil.getEasingAnimation(getAnimationKey());
+        if (this.enabled && AnimationUtil.getAnimation(getAnimationKey()) == null) size = 1;
+
+        float xOfEnabledBall = xOfEnabledButton + ((toggleButtonWidth-sliderBallSize-2) * size);
+
+        Color interpolatedColor = RenderUtil.interpolateColor(disabledColor, enabledColor, size);
+
         RenderUtil.drawRoundedRect(
                 xOfEnabledButton,
                 yOfEnabledButton, toggleButtonWidth, toggleButtonHeight, toggleButtonHeight,
-                this.enabled ? enabledColor : disabledColor
+                interpolatedColor
         );
 
         RenderUtil.drawRoundedRect(
-                xOfEnabledButton + (this.enabled ? toggleButtonWidth-sliderBallSize-2 : 2),
+                xOfEnabledBall,
                 yOfEnabledButton + toggleButtonHeight / 2f - sliderBallSize / 2f,
                 sliderBallSize, sliderBallSize, sliderBallSize,
                 new Color(0xffffffff)
@@ -96,17 +101,8 @@ public abstract class Module {
     }
 
     private AnimationUtil.Animation onLeftClick(AnimationUtil.Animation clickedInfo, String animationKey) {
-        float animationX = mX - RenderUtil.getTranslate()[0];
-        float animationY = mY - RenderUtil.getTranslate()[1];
-
-        //if (clickedInfo != null) {
-        //    animationX = clickedInfo.extra[0];
-        //    animationY = clickedInfo.extra[1];
-        //}
-
-
-        if (!this.enabled) AnimationUtil.addEasingAnimation(animationKey, new float[]{animationX,animationY});
-        else AnimationUtil.removeEasingAnimation(animationKey, new float[]{animationX,animationY});
+        if (!this.enabled) AnimationUtil.addEasingAnimation(animationKey);
+        else AnimationUtil.removeEasingAnimation(animationKey);
         this.toggle();
 
         return AnimationUtil.getAnimation(animationKey);
@@ -142,7 +138,7 @@ public abstract class Module {
         return this.module.name()+this.module.description();
     }
 
-    private String getAltAnimationKey() {
+    public String getAltAnimationKey() {
         return this.module.name()+this.module.category();
     }
 

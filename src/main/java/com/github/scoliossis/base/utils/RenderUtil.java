@@ -148,6 +148,8 @@ public class RenderUtil {
     public static ArrayList<float[]> currentScale = new ArrayList<>();
 
     public static void enableScale(float x, float y) {
+        if (x == 1 && y == 1) return;
+
         if (!currentScale.isEmpty()) {
             float[] csn = currentScale.get(currentScale.size()-1);
 
@@ -161,12 +163,13 @@ public class RenderUtil {
     }
 
     public static void setScale(float x, float y) {
-        currentScale.add(new float[] {x ,y});
+        GL11.glScaled(x,y,1);
+        currentScale.remove(currentScale.size()-1);
     }
 
     public static void disableScale() {
         if (!currentScale.isEmpty()) {
-            GL11.glScaled(1f / currentScale.get(currentScale.size() - 1)[0], 1f / currentScale.get(currentScale.size() - 1)[1], 1);
+            GL11.glScaled(1d / currentScale.get(currentScale.size() - 1)[0], 1d / currentScale.get(currentScale.size() - 1)[1], 1);
             currentScale.remove(currentScale.size() - 1);
         }
     }
@@ -540,6 +543,14 @@ public class RenderUtil {
         return (int) (num1 + (numDif * fadeNumber));
     }
 
+    public static Color interpolateColor(Color startColor, Color endColor, double lerp) {
+        return new Color(
+                getColorsFadeSingle(startColor.getRed(), endColor.getRed(), lerp),
+                getColorsFadeSingle(startColor.getGreen(), endColor.getGreen(), lerp),
+                getColorsFadeSingle(startColor.getBlue(), endColor.getBlue(), lerp),
+                getColorsFadeSingle(startColor.getAlpha(), endColor.getAlpha(), lerp)
+        );
+    }
 
     public static Color getColorsFade(double startNumber, Color[] colors, double fadeSpeed) {
         return getColorsFade(startNumber,colors,fadeSpeed, 255);
@@ -551,12 +562,7 @@ public class RenderUtil {
         int num1 = (int) (number % colors.length);
         int num2 = ((num1 + 1) % colors.length);
 
-        return setColorOpacity(new Color(
-                getColorsFadeSingle(colors[num1].getRed(), colors[num2].getRed(), number % 1),
-                getColorsFadeSingle(colors[num1].getGreen(), colors[num2].getGreen(), number % 1),
-                getColorsFadeSingle(colors[num1].getBlue(), colors[num2].getBlue(), number % 1),
-                getColorsFadeSingle(colors[num1].getAlpha(), colors[num2].getAlpha(), number % 1)
-        ), opacity);
+        return setColorOpacity(interpolateColor(colors[num1], colors[num2], number % 1), opacity);
     }
 
     public static Color[] getColorsFade(double startNumber, double endNumber, Color[] colors, double fadeSpeed) {
@@ -566,82 +572,12 @@ public class RenderUtil {
         return new Color[] {getColorsFade(startNumber, colors, fadeSpeed), getColorsFade(startNumber+endNumber, colors, fadeSpeed)};
     }
 
-    public static Color reverseColor(Color color, int opacity) {
+    public static Color inverseColor(Color color, int opacity) {
         return new Color(255-color.getRed(), 255-color.getGreen(), 255-color.getBlue(), opacity);
     }
 
     public static Color setColorOpacity(Color color, int opacity) {
         return new Color(color.getRed(), color.getGreen(), color.getBlue(), opacity);
-    }
-
-    public static String getCharFromInt(int num) {
-        switch (num) {
-            case 54:
-                return "R SHIFT";
-            case 42:
-                return "L SHIFT";
-            case 29:
-                return "L CTRL";
-            case 159:
-                return "R CTRL";
-            case 200:
-                return "UP";
-            case 205:
-                return "RIGHT";
-            case 208:
-                return "DOWN";
-            case 203:
-                return "LEFT";
-            case 219:
-                return "HOME";
-            case 56:
-                return "L ALT";
-            case 184:
-                return "R ALT";
-            case 58:
-                return "CAPS";
-            case 211:
-                return "DELETE";
-
-            case 59:
-                return "F1";
-            case 60:
-                return "F2";
-            case 61:
-                return "F3";
-            case 62:
-                return "F4";
-            case 63:
-                return "F5";
-            case 64:
-                return "F6";
-            case 65:
-                return "F7";
-            case 66:
-                return "F8";
-            case 67:
-                return "F9";
-            case 68:
-                return "F10";
-        }
-
-        return "UNKNOWN";
-    }
-
-
-    // stuff that should be in fontutil but i prefer doing renderutil.drawString
-
-    // class for these so i know which one is which easier
-    public static class StringModifiers {
-        public final static int RAINBOW = 0;
-        public final static int BOLD = 1;
-        public final static int SHADOW = 2;
-        public final static int OBFUSCATED = 3;
-        public final static int UNDERLINE = 4;
-        public final static int STRIKETHROUGH = 5;
-        public final static int OUTLINE = 6;
-
-        public final static int AMOUNT_OF_MODIFIERS = 7;
     }
 
     // ew, so many
@@ -666,7 +602,7 @@ public class RenderUtil {
     }
 
     public static void renderBox3D(double x1, double y1, double z1, float width, float height, float partialTicks, Color color) {
-        render3Dstart(x1,y1,z1,partialTicks);
+        render3dStart(x1,y1,z1,partialTicks);
 
         beginAddingVertex(drawMode.QUADS, DefaultVertexFormats.POSITION);
 
@@ -700,11 +636,11 @@ public class RenderUtil {
         addVertex3Dcolor(width, height, width, color);
         addVertex3Dcolor(0, height, width, color);
 
-        render3Dend();
+        render3dEnd();
     }
 
     public static void renderBox3Dfade(double x1, double y1, double z1, float width, float height, float partialTicks, Color color, Color color2) {
-        render3Dstart(x1,y1,z1,partialTicks);
+        render3dStart(x1,y1,z1,partialTicks);
 
         beginAddingVertex(drawMode.QUADS, DefaultVertexFormats.POSITION_COLOR);
 
@@ -738,7 +674,7 @@ public class RenderUtil {
         addVertex3Dcolor(width, height, width, color2);
         addVertex3Dcolor(0, height, width, color2);
 
-        render3Dend();
+        render3dEnd();
     }
 
     public static float[] correct3DForTicks(double x, double y, double z, float partialTicks) {
@@ -750,7 +686,7 @@ public class RenderUtil {
     }
 
 
-    public static void render3Dstart() {
+    public static void render3dStart() {
         // shouldn't be called start 2d... it starts everything
         start2d();
 
@@ -763,8 +699,8 @@ public class RenderUtil {
         GlStateManager.disableLighting();
     }
 
-    public static void render3Dstart(double x1, double y1, double z1, float partialTicks) {
-        render3Dstart();
+    public static void render3dStart(double x1, double y1, double z1, float partialTicks) {
+        render3dStart();
 
         float[] poses = correct3DForTicks(x1,y1,z1,partialTicks);
         float x = poses[0];
@@ -774,7 +710,7 @@ public class RenderUtil {
         GL11.glTranslated(x, y, z);
     }
 
-    public static void render3Dend() {
+    public static void render3dEnd() {
         finish2d();
 
         GL11.glPopMatrix();
@@ -783,7 +719,7 @@ public class RenderUtil {
     }
 
     public static void drawCool3dGlow(double x, double y, double z, float width, float height, float partialticks, Color color, boolean pitch) {
-        render3Dstart(x,y,z,partialticks);
+        render3dStart(x,y,z,partialticks);
 
         GL11.glRotatef(-C.p().rotationYaw, 0,1,0);
         // what year was autism invented?
@@ -793,11 +729,11 @@ public class RenderUtil {
         addGlowVertex(-width/2,0,width,height, 100, color);
         //addRectVertex(-width/2f,0,width,height, color);
 
-        render3Dend();
+        render3dEnd();
     }
 
     public static void render3Drectangle(double x, double y, double z, float width, float height, float partialticks, Color color, boolean pitch) {
-        render3Dstart(x,y,z,partialticks);
+        render3dStart(x,y,z,partialticks);
 
         GL11.glRotatef(-C.p().rotationYaw, 0,1,0);
         // what year was autism invented?
@@ -806,6 +742,6 @@ public class RenderUtil {
 
         addRectVertex(-width/2f,0,width,height, color);
 
-        render3Dend();
+        render3dEnd();
     }
 }

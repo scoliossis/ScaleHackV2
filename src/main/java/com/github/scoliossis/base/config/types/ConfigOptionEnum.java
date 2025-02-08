@@ -2,6 +2,7 @@ package com.github.scoliossis.base.config.types;
 
 import com.github.scoliossis.base.config.ConfigOption;
 import com.github.scoliossis.base.modules.Setting;
+import com.github.scoliossis.base.utils.AnimationUtil;
 import com.github.scoliossis.base.utils.RenderUtil;
 import com.github.scoliossis.base.utils.font.FontRegistry;
 import lombok.Getter;
@@ -33,9 +34,18 @@ public class ConfigOptionEnum<T> extends ConfigOption<T> {
         Color color = getColor(categoryNumber);
 
         onClickMain();
-        if (shownModes.contains(this)) drawModes(color);
+
+        float size = (float) AnimationUtil.getEasingAnimation(getAnimationKey());
+        if (shownModes.contains(this) && AnimationUtil.getAnimation(getAnimationKey()) == null) size = 1;
 
         RenderUtil.enableTranslate(0,childHeight);
+
+        if (size != 0) {
+            RenderUtil.enableScale(1, size);
+            drawModes(color);
+            RenderUtil.enableTranslate(0,childHeight);
+            if (size != 1) RenderUtil.disableScale();
+        }
 
         // draw children of this child.
         for (ConfigOption<?> child : this.children) {
@@ -47,8 +57,17 @@ public class ConfigOptionEnum<T> extends ConfigOption<T> {
     private void onClickMain() {
         if (isHovered(x, y, width, childHeight)) {
             if (leftMousePressed || rightMousePressed) {
-                if (shownModes.contains(this)) shownModes.remove(this);
-                else shownModes.add(this);
+                leftMousePressed = rightMousePressed = false;
+
+                if (shownModes.contains(this)) {
+                    shownModes.remove(this);
+                    AnimationUtil.removeEasingAnimation(getAnimationKey());
+                    return;
+                }
+
+                shownModes.add(this);
+                AnimationUtil.addEasingAnimation(getAnimationKey());
+
             }
         }
     }
@@ -58,7 +77,7 @@ public class ConfigOptionEnum<T> extends ConfigOption<T> {
 
         float baseStringX = x+xOff + 10;
         float stringX = baseStringX;
-        int stringY = childHeight;
+        int stringY = 0;
 
         T[] enumConstants = (T[]) field.getType().getEnumConstants();
 
@@ -92,6 +111,10 @@ public class ConfigOptionEnum<T> extends ConfigOption<T> {
         //yOffset -= (oldY-y);
         //categoryHeights.set(index, yOffset);
         RenderUtil.enableTranslate(0, stringY);
+    }
+
+    private String getAnimationKey() {
+        return this.name() + this.annotation.description();
     }
 
 

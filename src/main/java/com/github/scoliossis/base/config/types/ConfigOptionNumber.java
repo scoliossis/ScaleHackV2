@@ -38,7 +38,7 @@ public class ConfigOptionNumber<T> extends ConfigOption<T> {
 
         // draws slider %
         RenderUtil.drawRect(x + xOff + sliderIndent, y + childHeight - 8, (float) currentSliderNumber, 2, enabledColor);
-        RenderUtil.drawRoundedRect((float) (x + xOff + sliderIndent + currentSliderNumber - 2), y + childHeight - 10, 6, 6, 6, new Color(255,255,255));
+        RenderUtil.drawRoundedRect((float) (x + xOff + sliderIndent + currentSliderNumber - 3), y + childHeight - 10, 6, 6, 6, new Color(255,255,255));
 
 
         RenderUtil.drawStringCenteredY(settingName, x + xOff + 5, y + (childHeight / 4f), stringColor);
