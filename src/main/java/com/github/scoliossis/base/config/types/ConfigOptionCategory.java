@@ -22,7 +22,7 @@ public class ConfigOptionCategory extends ConfigOption<Category> {
         String settingName = formatSettingName(this.name());
 
         // draw background
-        RenderUtil.drawRect(x+xOff, y, width-xOff*2, childHeight, getBackgroundColor(this));
+        RenderUtil.drawRect(x, y, width, childHeight, backgroundColor);
 
         onLeftClick();
 

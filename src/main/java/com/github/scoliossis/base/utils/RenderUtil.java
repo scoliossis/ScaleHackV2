@@ -336,6 +336,34 @@ public class RenderUtil {
         finish2d();
     }
 
+    public static void drawOutlineRoundedRect(float x, float y, float w, float h, float radius, Color color) {
+        // makes sure the rectangle doesn't bend in on itself
+        radius = Math.min(radius, w / 2);
+        radius = Math.min(radius, h / 2);
+
+        // setup drawing
+        start2d();
+        beginAddingVertex(drawMode.LINE_STRIP, DefaultVertexFormats.POSITION_COLOR);
+
+        // loop through a whole circle,
+        // every 90 degrees move to a corner
+        // 0 is top left, 90 is bottom left, 180 is bottom right, 270 is top right
+
+        // looping 360 times sorta poops on fps, maybe i+=5 would help,
+        // but i dont draw many rounded rectangles anyway
+        for (int i = 0; i <= 360; i++) {
+            float xN = getRoundedRectPoint(x, radius, i, 1) + (i > 180 ? w-(radius*2) : 0);
+            float yN = getRoundedRectPoint(y, radius, i, 2) + (i > 90 && i <= 270 ? h-(radius*2) : 0);
+
+            addVertexColor(xN, yN, color);
+        }
+
+        addVertexColor(x+radius, y, color);
+
+        // we have finished! draw!
+        finish2d();
+    }
+
     static float easeInOutExpo(double x) {
         return x == 0
                 ? 0

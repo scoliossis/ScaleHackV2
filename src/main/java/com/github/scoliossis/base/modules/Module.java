@@ -41,22 +41,16 @@ public abstract class Module {
         return enabled;
     }
 
-    private Color moduleToggledColor = new Color(2, 159, 95);
-    private Color moduleDisabledColor = new Color(108, 3, 3);
-
     public void draw(int categoryNumber) {
         Color color = getColor(categoryNumber);
-
-        moduleToggledColor = new Color(87, 3, 126);
-        moduleDisabledColor = new Color(38, 3, 65);
 
         String settingName = formatSettingName(this.module.name());
 
         // draw background
-        RenderUtil.drawRect(x,y,width,moduleHeight+moduleGap+5,moduleColor);
+        RenderUtil.drawRect(x,y,width,moduleHeight+moduleGap+5,backgroundColor);
 
         // draw button
-        RenderUtil.drawRoundedRect(x+xOff, y, width-xOff*2, moduleHeight, moduleRadius, moduleOutlineColor);
+        //RenderUtil.drawRoundedRect(x+xOff, y, width-xOff*2, moduleHeight, moduleRadius, moduleOutlineColor);
         RenderUtil.drawRoundedRect(x+xOff+1, y+1, width-xOff*2-2, moduleHeight-2, moduleRadius-2, moduleColor);
 
         String animationKey = getAnimationKey();
@@ -85,7 +79,7 @@ public abstract class Module {
         RenderUtil.drawRoundedRect(
                 xOfEnabledButton,
                 yOfEnabledButton, toggleButtonWidth, toggleButtonHeight, toggleButtonHeight,
-                this.enabled ? moduleToggledColor : moduleDisabledColor
+                this.enabled ? enabledColor : disabledColor
         );
 
         RenderUtil.drawRoundedRect(
@@ -98,7 +92,7 @@ public abstract class Module {
         // draw text
         RenderUtil.drawStringCenteredY(moduleTitleModifiers + settingName, x + xOff + 5, textY, stringColor);
 
-        RenderUtil.enableTranslate(0, moduleHeight + moduleGap);
+        RenderUtil.enableTranslate(0, moduleHeight);
     }
 
     private AnimationUtil.Animation onLeftClick(AnimationUtil.Animation clickedInfo, String animationKey) {

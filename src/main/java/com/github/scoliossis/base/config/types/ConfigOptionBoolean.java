@@ -5,7 +5,6 @@ import com.github.scoliossis.base.modules.Setting;
 import com.github.scoliossis.base.utils.AnimationUtil;
 import com.github.scoliossis.base.utils.RenderUtil;
 
-import java.awt.*;
 import java.lang.reflect.Field;
 
 import static com.github.scoliossis.base.screens.clickgui.ClickGUIScreenMain.*;
@@ -23,7 +22,7 @@ public class ConfigOptionBoolean extends ConfigOption<Boolean> {
         String settingName = formatSettingName(this.name());
 
         // draw background
-        RenderUtil.drawRect(x+xOff, y, width-xOff*2, childHeight, getBackgroundColor(this));
+        RenderUtil.drawRect(x, y, width, childHeight, backgroundColor);
 
         // if hovering over button
         onLeftClick();
@@ -31,7 +30,7 @@ public class ConfigOptionBoolean extends ConfigOption<Boolean> {
         // draws a growing square infront of a white one, square grows until behind square is filled
         drawEnabledBox(categoryNumber);
 
-        RenderUtil.drawStringCenteredY(settingName, x + 5, y + (childHeight / 2f), stringColor);
+        RenderUtil.drawStringCenteredY(settingName, x + xOff + 5, y + (childHeight / 2f), stringColor);
 
         RenderUtil.enableTranslate(0, childHeight);
 
@@ -42,13 +41,11 @@ public class ConfigOptionBoolean extends ConfigOption<Boolean> {
 
 
     private void drawEnabledBox(int categoryNumber) {
-        Color color = getColor(categoryNumber);
-
-        float smallSquareX = x + width - 20;
+        float smallSquareX = x + width - xOff - 20;
         float smallSquareY = y + childHeight / 2f - boxSize / 2f;
 
         // draws a small box to be filled
-        RenderUtil.drawRoundedRect(smallSquareX, smallSquareY, boxSize, boxSize, 1, new Color(0, 0, 0));
+        RenderUtil.drawRoundedRect(smallSquareX, smallSquareY, boxSize, boxSize, 1, disabledColor);
 
         // if setting enabled + animation done
         float size = (float) AnimationUtil.getEasingAnimation(getAnimationKey());
@@ -57,7 +54,7 @@ public class ConfigOptionBoolean extends ConfigOption<Boolean> {
         smallSquareX -= boxSize*size / 2f - boxSize / 2f;
         smallSquareY -= boxSize*size / 2f - boxSize / 2f;
 
-        RenderUtil.drawRoundedRect(smallSquareX, smallSquareY, boxSize*size, boxSize * size, 1, color);
+        RenderUtil.drawRoundedRect(smallSquareX, smallSquareY, boxSize*size, boxSize * size, 1, enabledColor);
         //RenderUtil.drawRoundedRect(smallSquareX, smallSquareY, boxW*size, boxH, 1, new Color(color));
     }
 

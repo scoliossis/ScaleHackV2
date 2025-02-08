@@ -45,5 +45,6 @@ public class ClickGUIModule extends Module {
     }
 
     public void onDisable() {
+        C.p().closeScreen();
     }
 }

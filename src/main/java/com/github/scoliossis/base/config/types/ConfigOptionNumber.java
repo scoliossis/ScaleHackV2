@@ -7,6 +7,7 @@ import com.github.scoliossis.base.utils.MathUtil;
 import com.github.scoliossis.base.utils.RenderUtil;
 import com.github.scoliossis.base.utils.font.FontRegistry;
 
+import java.awt.*;
 import java.lang.reflect.Field;
 
 import static com.github.scoliossis.base.screens.clickgui.ClickGUIScreenMain.*;
@@ -16,14 +17,16 @@ public class ConfigOptionNumber<T> extends ConfigOption<T> {
         super(field, instance, annotation);
     }
 
-    double sliderWidth = width - xOff*2;
+    int sliderIndent = 5;
+    double sliderWidth = width - xOff*2 - sliderIndent*2;
     double settingGap = this.annotation.max() - this.annotation.min();
 
     @Override
     public void draw(int categoryNumber) {
+
         String settingName = formatSettingName(this.name());
         // draw background
-        RenderUtil.drawRect(x+xOff, y, width-xOff*2, childHeight, getBackgroundColor(this));
+        RenderUtil.drawRect(x, y, width, childHeight, backgroundColor);
 
         // u cant cast Integer or any other non-primitive to double, so make it a string, and parse.
         double settingNumber = Double.parseDouble(get().toString());
@@ -34,11 +37,12 @@ public class ConfigOptionNumber<T> extends ConfigOption<T> {
         onDragSlider();
 
         // draws slider %
-        RenderUtil.drawRect(x + xOff, y + 2, (float) currentSliderNumber, childHeight - 4, getColor(categoryNumber));
+        RenderUtil.drawRect(x + xOff + sliderIndent, y + childHeight - 8, (float) currentSliderNumber, 2, enabledColor);
+        RenderUtil.drawRoundedRect((float) (x + xOff + sliderIndent + currentSliderNumber - 2), y + childHeight - 10, 6, 6, 6, new Color(255,255,255));
 
 
-        RenderUtil.drawStringCenteredY(settingName, x + 5, y + (childHeight / 2f), stringColor);
-        RenderUtil.drawStringCenteredY(""+settingNumber, x + width - FontRegistry.getSpaceGroteskRegular18px().getStringWidth("&o" + settingNumber), y + (childHeight / 2f), stringColor);
+        RenderUtil.drawStringCenteredY(settingName, x + xOff + 5, y + (childHeight / 4f), stringColor);
+        RenderUtil.drawStringCenteredY(""+settingNumber, x + width - FontRegistry.getSpaceGroteskRegular18px().getStringWidth("" + settingNumber) - xOff - 10, y + (childHeight / 4f), stringColor);
 
         RenderUtil.enableTranslate(0, childHeight);
 
@@ -58,7 +62,7 @@ public class ConfigOptionNumber<T> extends ConfigOption<T> {
                 return;
             }
 
-            double mouseXonSlider = mX - RenderUtil.getTranslate()[0] - x - outlineWidth;
+            double mouseXonSlider = mX - RenderUtil.getTranslate()[0] - x - xOff - sliderIndent;
             double sliderSelectedFraction = mouseXonSlider / sliderWidth;
             double numberSetting = (sliderSelectedFraction * settingGap) + this.annotation.min();
 

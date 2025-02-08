@@ -30,18 +30,22 @@ public class ClickGUIScreenMain extends GuiScreen {
 
     public static int mX, mY;
 
-    static int height = 40;
+    static int height = 20;
 
-    public static int moduleHeight = 40;
+    public static int moduleHeight = 20;
 
     public static int childHeight = 20;
 
     public static Category currentDraggingCategory;
 
+    public static Color backgroundColor = new Color(22,22,22);
     public static Color stringColor = new Color(255,255,255);
     public static Color descriptionColor = new Color(200,200,200);
     public static Color moduleColor = new Color(22,22,22);
     public static Color moduleOutlineColor = new Color(30,30,30);
+
+    public static Color enabledColor = new Color(87, 3, 126);
+    public static Color disabledColor = new Color(38, 3, 65);
 
     public static String headerModifiers = "§l";
     public static String moduleTitleModifiers = "§l";
@@ -85,10 +89,12 @@ public class ClickGUIScreenMain extends GuiScreen {
 
         ModuleCategory category = ModuleCategory.values()[categoryNumber];
         for (Module module : ModuleManager.getModulesByCategory(category)) {
+            float currentTransY = RenderUtil.getTranslate()[1];
+
             module.draw(categoryNumber);
 
             // draw children!
-            if (ClickGUIModule.rightClickedModules.contains(module))
+            if (ClickGUIModule.rightClickedModules.contains(module)) {
                 for (ConfigOption<?> child : module.children) {
                     if (child == null) {
                         System.out.println("bro why " + module.module.name());
@@ -96,6 +102,14 @@ public class ClickGUIScreenMain extends GuiScreen {
                     }
                     child.draw(categoryNumber);
                 }
+            }
+
+            // draws box outline!
+            float newTransY = RenderUtil.getTranslate()[1];
+            float height = newTransY-currentTransY;
+            RenderUtil.drawRect(x,y,width,moduleGap, backgroundColor);
+            RenderUtil.drawOutlineRoundedRect(x+xOff,y-height,width-xOff*2,height, moduleRadius, moduleOutlineColor);
+            RenderUtil.enableTranslate(0, moduleGap);
         }
 
         // draws big bottom line bar
@@ -108,7 +122,7 @@ public class ClickGUIScreenMain extends GuiScreen {
         Color color = getColor(categoryNumber);
 
         // background and title name
-        RenderUtil.drawRoundedRect(x, y, width, height + outlineRadius, outlineRadius, moduleColor);
+        RenderUtil.drawRoundedRect(x, y, width, height + outlineRadius, outlineRadius, backgroundColor);
         RenderUtil.drawStringCenteredY(headerModifiers + formatSettingName(category.name()), x + 10, y + (height/2f), stringColor);
 
         // offset
@@ -123,7 +137,7 @@ public class ClickGUIScreenMain extends GuiScreen {
         //RenderUtil.drawRect(x+width-outlineWidth, y, outlineWidth, xOff, color);
         //RenderUtil.drawRect(x, y + xOff, width, outlineWidth, color);
 
-        RenderUtil.drawRoundedRect(x, y, width, outlineRadius, outlineRadius, moduleColor);
+        RenderUtil.drawRoundedRect(x, y, width, outlineRadius, outlineRadius, backgroundColor);
     }
 
     // gets color of category.
@@ -156,7 +170,7 @@ public class ClickGUIScreenMain extends GuiScreen {
         // close when escape pressed.
         if (key == 1 && currentKeybind == null) {
             ModuleManager.save("config");
-            C.p().closeScreen();
+            ModuleManager.toggle(ClickGUIModule.class);
         }
 
         lastKey = key;
@@ -200,7 +214,8 @@ public class ClickGUIScreenMain extends GuiScreen {
 
 
     public static String formatSettingName(String settingName) {
-        return settingName;
+        return settingName.replaceAll("_", " ");
+        //return settingName;
         //return settingName.toLowerCase().replaceAll(" ", "").replaceAll("_", "");
     }
 

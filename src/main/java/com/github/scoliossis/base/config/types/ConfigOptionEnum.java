@@ -24,11 +24,11 @@ public class ConfigOptionEnum<T> extends ConfigOption<T> {
         String settingName = formatSettingName(this.name());
 
         // draw background
-        RenderUtil.drawRect(x+xOff, y, width-xOff*2, childHeight, getBackgroundColor(this));
+        RenderUtil.drawRect(x, y, width, childHeight, backgroundColor);
 
         String mode = formatSettingName(this.getOption().name);
 
-        RenderUtil.drawStringCenteredY(settingName + "   -   " + mode, x + 5, y + (childHeight / 2f), stringColor);
+        RenderUtil.drawStringCenteredY(settingName + "   -   " + mode, x + xOff + 5, y + (childHeight / 2f), stringColor);
 
         Color color = getColor(categoryNumber);
 
@@ -56,31 +56,30 @@ public class ConfigOptionEnum<T> extends ConfigOption<T> {
     private void drawModes(Color color) {
         //float oldY = y;
 
-        float stringX = x+5;
+        float baseStringX = x+xOff + 10;
+        float stringX = baseStringX;
         int stringY = childHeight;
 
         T[] enumConstants = (T[]) field.getType().getEnumConstants();
 
-        RenderUtil.drawRect(x, stringY, width, moduleHeight, new Color(26,26,26));
-        RenderUtil.drawRect(x+xOff, stringY, width-xOff*2, childHeight, getBackgroundColor(this, 2));
+        RenderUtil.drawRect(x, stringY, width, childHeight, backgroundColor);
 
         for (int i = 0; i < enumConstants.length; i++) {
             String settingName = formatSettingName(enumConstants[i].toString());
             if (i != enumConstants.length-1) settingName += ", ";
 
             float stringWidth = FontRegistry.getSpaceGroteskRegular18px().getStringWidth(settingName);
-            if (stringX + stringWidth >= x + width) {
-                stringX = x+5;
+            if (stringX + stringWidth >= x + width - xOff) {
+                stringX = baseStringX;
                 stringY += childHeight;
 
-                RenderUtil.drawRect(x, stringY, width, moduleHeight, new Color(26,26,26));
-                RenderUtil.drawRect(x+xOff, stringY, width-xOff*2, childHeight, getBackgroundColor(this, 2));
+                RenderUtil.drawRect(x, stringY, width, childHeight, backgroundColor);
 
                 //y += height;
             }
 
-            Color fontColor = new Color(0xEEEEEE);
-            if (enumConstants[i] == this.get()) fontColor = color;
+            Color fontColor = stringColor;
+            if (enumConstants[i] == this.get()) fontColor = enabledColor;
 
             if (isHovered(stringX, stringY, stringWidth, childHeight) && (leftMousePressed || rightMousePressed))
                 this.set((T) field.getType().getEnumConstants()[i]);

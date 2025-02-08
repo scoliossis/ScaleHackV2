@@ -18,23 +18,12 @@ public class NickHiderModule extends Module {
     public static String fixText(String text) {
         if (ModuleManager.isEnabled(NickHiderModule.class)) text = text.replaceAll(C.p().getName(), spoofedName);
         if (DisablerModule.antiRacism && ModuleManager.isEnabled(DisablerModule.class)) {
-            //for (String word : DisablerModule.racistWords) {
-            //    text = text.replaceAll(word, DisablerModule.censorRacism(word));
-            //}
-
-            // patches racism. donald trump should try this
-            for (String word : text.split(" ")) {
-                if (DisablerModule.racistWords.contains(removeBad(word)))
-                    text = text.replaceAll(word, DisablerModule.censorRacism(word));
+            for (String word : DisablerModule.racistWords) {
+                text = text.replaceAll("(?i)"+word, DisablerModule.censorRacism(word));
             }
         }
 
         return text;
-    }
-
-
-    public static String removeBad(String text) {
-        return text.replaceAll("[.,/\\\\!@#$%^&*()]", "").toLowerCase();
     }
 
     @Override
