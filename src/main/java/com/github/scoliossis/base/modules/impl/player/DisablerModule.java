@@ -58,6 +58,7 @@ public class DisablerModule extends Module {
             // truly disheartening words. (mushroom client is BANNED from this client.)
             "mush", "room",
             "sca", "le",
+            "syu", "to",
             "sw", "ig",
             "bat", "man",
             "side", "load",
